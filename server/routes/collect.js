@@ -2,7 +2,34 @@ const express = require('express');
 const multer = require('multer');
 const crypto = require('crypto');
 const { v2: cloudinary } = require('cloudinary');
+const { Resend } = require('resend');
 const db = require('../db');
+
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+
+async function sendNotification({ to, businessName, customerName, rating, reviewText }) {
+  if (!resend) return;
+  const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+  await resend.emails.send({
+    from: 'Fimi <notifications@fimi.gr>',
+    to,
+    subject: `Νέα κριτική για ${businessName}`,
+    html: `
+      <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;background:#f9fafb;border-radius:12px">
+        <h2 style="margin:0 0 8px;color:#1e1b4b">Νέα κριτική ⭐</h2>
+        <p style="color:#6b7280;margin:0 0 24px">Ο/Η <strong>${customerName}</strong> άφησε κριτική για <strong>${businessName}</strong></p>
+        <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:20px;margin-bottom:24px">
+          <p style="font-size:20px;margin:0 0 8px">${stars}</p>
+          <p style="color:#374151;margin:0;font-style:italic">"${reviewText}"</p>
+        </div>
+        <a href="https://testimonial-app-production.up.railway.app/dashboard" style="background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;display:inline-block">
+          Δες την κριτική →
+        </a>
+        <p style="color:#9ca3af;font-size:12px;margin-top:24px">Fimi — απόκρυψη ειδοποιήσεων από το dashboard</p>
+      </div>
+    `,
+  }).catch((err) => console.error('Email error:', err));
+}
 
 const router = express.Router();
 
@@ -93,6 +120,15 @@ router.post('/:slug', upload.single('screenshot'), async (req, res) => {
       new Date().toISOString(),
       deleteToken
     );
+
+    const owner = db.prepare('SELECT email, name FROM businesses WHERE id = ?').get(business.id);
+    sendNotification({
+      to: owner.email,
+      businessName: owner.name,
+      customerName: customer_name.trim(),
+      rating: ratingNum,
+      reviewText: review_text.trim(),
+    });
 
     res.json({ success: true, deleteToken });
   } catch (err) {
