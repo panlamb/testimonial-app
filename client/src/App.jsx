@@ -6,9 +6,15 @@ import CollectPage from './pages/CollectPage'
 import WallPage from './pages/WallPage'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import DeleteTestimonial from './pages/DeleteTestimonial'
+import AdminLogin from './pages/AdminLogin'
+import AdminDashboard from './pages/AdminDashboard'
 
 function PrivateRoute({ children }) {
   return localStorage.getItem('token') ? children : <Navigate to="/login" replace />
+}
+
+function AdminRoute({ children }) {
+  return localStorage.getItem('admin_token') ? children : <Navigate to="/admin" replace />
 }
 
 export default function App() {
@@ -22,6 +28,8 @@ export default function App() {
       <Route path="/wall/:slug" element={<WallPage />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/delete/:token" element={<DeleteTestimonial />} />
+      <Route path="/admin" element={<AdminLogin />} />
+      <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
     </Routes>
   )
 }
