@@ -14,10 +14,10 @@ export default function WallPage() {
 
   if (notFound) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Page Not Found</h2>
-          <p className="text-gray-500">This wall doesn&apos;t exist.</p>
+          <h2 className="text-2xl font-bold text-white mb-2">Η σελίδα δεν βρέθηκε</h2>
+          <p className="text-gray-400">Αυτό το wall δεν υπάρχει.</p>
         </div>
       </div>
     )
@@ -25,63 +25,74 @@ export default function WallPage() {
 
   if (!data) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-400">Loading…</div>
+      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center text-gray-400">
+        Φόρτωση…
+      </div>
     )
   }
 
   const { business, testimonials } = data
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-        {/* Hero */}
-        <div className="text-center mb-14">
-          <p className="text-indigo-600 font-medium uppercase tracking-widest text-xs mb-3">
-            Wall of Love
-          </p>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
-            What people say about{' '}
-            <span className="text-indigo-600">{business.name}</span>
+    <div className="min-h-screen bg-[#0a0a0f] text-white">
+      {/* Glow */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-indigo-600/15 rounded-full blur-[120px]" />
+      </div>
+
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <span className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent block mb-8">
+            Fimi
+          </span>
+          <p className="text-indigo-400 text-sm font-semibold tracking-widest mb-4">Wall of Love</p>
+          <h1 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
+            Τι λένε για{' '}
+            <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
+              {business.name}
+            </span>
           </h1>
           {testimonials.length > 0 && (
-            <p className="text-gray-500 mt-4 text-lg">
-              {testimonials.length} happy{' '}
-              {testimonials.length === 1 ? 'customer' : 'customers'}
+            <p className="text-gray-500 mt-4">
+              {testimonials.length} ικανοποιημένοι{' '}
+              {testimonials.length === 1 ? 'πελάτης' : 'πελάτες'}
             </p>
           )}
         </div>
 
+        {/* Testimonials */}
         {testimonials.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-5xl mb-4">⭐</div>
-            <p className="text-gray-400">No approved testimonials yet.</p>
+            <p className="text-gray-500">Δεν υπάρχουν εγκεκριμένες κριτικές ακόμα.</p>
           </div>
         ) : (
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-6">
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-5">
             {testimonials.map((t) => (
               <div
                 key={t.id}
-                className="break-inside-avoid mb-6 bg-white rounded-xl border border-gray-200 p-6 shadow-sm"
+                className="break-inside-avoid mb-5 bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-indigo-500/30 transition"
               >
                 {t.screenshot_url && (
                   <img
                     src={t.screenshot_url}
                     alt="Review screenshot"
-                    className="w-full rounded-lg mb-4 object-cover"
+                    className="w-full rounded-xl mb-4 object-cover opacity-90"
                   />
                 )}
                 <StarRating value={t.rating} readonly />
-                <p className="text-gray-700 mt-3 mb-5 leading-relaxed">
+                <p className="text-gray-300 mt-3 mb-5 leading-relaxed text-sm">
                   &ldquo;{t.review_text}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-300 font-bold text-sm shrink-0">
                     {t.customer_name[0].toUpperCase()}
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900 text-sm">{t.customer_name}</p>
-                    <p className="text-xs text-gray-400">
-                      {new Date(t.created_at).toLocaleDateString()}
+                    <p className="font-medium text-white text-sm">{t.customer_name}</p>
+                    <p className="text-xs text-gray-500">
+                      {new Date(t.created_at).toLocaleDateString('el-GR')}
                     </p>
                   </div>
                 </div>
@@ -91,8 +102,11 @@ export default function WallPage() {
         )}
 
         {business.plan === 'free' && (
-          <p className="text-center text-sm text-gray-400 mt-12">
-            Powered by <span className="font-medium text-gray-500">TestimonialApp</span>
+          <p className="text-center text-xs text-gray-600 mt-16">
+            Powered by{' '}
+            <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent font-semibold">
+              Fimi
+            </span>
           </p>
         )}
       </div>

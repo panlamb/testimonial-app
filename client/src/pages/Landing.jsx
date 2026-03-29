@@ -89,7 +89,7 @@ export default function Landing() {
       <section id="how-it-works" className="py-24 relative">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-16">
-            <p className="text-indigo-400 text-sm font-semibold uppercase tracking-widest mb-3">Απλή διαδικασία</p>
+            <p className="text-indigo-400 text-sm font-semibold tracking-widest mb-3">Απλή διαδικασία</p>
             <h2 className="text-4xl font-bold text-white">Τρία βήματα και είσαι έτοιμος</h2>
           </div>
 
@@ -118,7 +118,7 @@ export default function Landing() {
       <section className="py-24 bg-white/[0.02] border-y border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-16">
-            <p className="text-indigo-400 text-sm font-semibold uppercase tracking-widest mb-3">Δυνατότητες</p>
+            <p className="text-indigo-400 text-sm font-semibold tracking-widest mb-3">Δυνατότητες</p>
             <h2 className="text-4xl font-bold text-white">Όλα όσα χρειάζεσαι</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -140,7 +140,7 @@ export default function Landing() {
       <section className="py-24">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-16">
-            <p className="text-indigo-400 text-sm font-semibold uppercase tracking-widest mb-3">Κριτικές</p>
+            <p className="text-indigo-400 text-sm font-semibold tracking-widest mb-3">Κριτικές</p>
             <h2 className="text-4xl font-bold text-white">Τι λένε οι χρήστες μας</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
