@@ -1,8 +1,36 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { Resend } = require('resend');
 const db = require('../db');
 const { JWT_SECRET } = require('../middleware/auth');
+
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+
+async function notifyNewSignup({ name, email, slug }) {
+  if (!resend) return;
+  const date = new Date().toLocaleString('el-GR', { timeZone: 'Europe/Athens' });
+  await resend.emails.send({
+    from: 'Fimi <onboarding@resend.dev>',
+    to: 'panos.lambrakis@gmail.com',
+    subject: `Νέος χρήστης: ${name}`,
+    html: `
+      <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;background:#f9fafb;border-radius:12px">
+        <h2 style="margin:0 0 8px;color:#1e1b4b">Νέα εγγραφή 🎉</h2>
+        <p style="color:#6b7280;margin:0 0 24px">Κάποιος έκανε sign up στο Fimi</p>
+        <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:20px;margin-bottom:24px">
+          <p style="margin:0 0 8px"><strong>Όνομα:</strong> ${name}</p>
+          <p style="margin:0 0 8px"><strong>Email:</strong> ${email}</p>
+          <p style="margin:0 0 8px"><strong>Slug:</strong> ${slug}</p>
+          <p style="margin:0"><strong>Ημερομηνία:</strong> ${date}</p>
+        </div>
+        <a href="https://testimonial-app-production.up.railway.app/admin/dashboard" style="background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;display:inline-block">
+          Admin Dashboard →
+        </a>
+      </div>
+    `,
+  }).catch((err) => console.error('Signup notification email error:', err));
+}
 
 const router = express.Router();
 
@@ -34,6 +62,7 @@ router.post('/register', (req, res) => {
     ).get(result.lastInsertRowid);
 
     const token = jwt.sign({ businessId: business.id }, JWT_SECRET, { expiresIn: '7d' });
+    notifyNewSignup({ name: business.name, email: business.email, slug: business.slug });
     res.json({ token, business });
   } catch (err) {
     if (err.message.includes('UNIQUE constraint failed: businesses.email')) {
