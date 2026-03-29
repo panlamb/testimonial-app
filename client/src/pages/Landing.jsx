@@ -77,8 +77,8 @@ export default function Landing() {
 
       {/* Hero */}
       <section className="max-w-5xl mx-auto px-6 py-24 text-center">
-        <div className="inline-block bg-indigo-50 text-indigo-600 text-xs font-semibold px-3 py-1 rounded-full mb-6 uppercase tracking-wide">
-          Δωρεάν για πάντα — χωρίς πιστωτική κάρτα
+        <div className="inline-block bg-indigo-50 text-indigo-600 text-xs font-semibold px-3 py-1 rounded-full mb-6 tracking-wide">
+          Ξεκίνα δωρεάν — χωρίς πιστωτική κάρτα
         </div>
         <h1 className="text-4xl sm:text-6xl font-bold text-gray-900 leading-tight mb-6">
           Οι κριτικές σου στο Google<br />
@@ -102,7 +102,7 @@ export default function Landing() {
             Πώς λειτουργεί
           </a>
         </div>
-        <p className="text-sm text-gray-400 mt-4">Δεν χρειάζεται πιστωτική κάρτα. Δωρεάν για πάντα.</p>
+        <p className="text-sm text-gray-400 mt-4">Δεν χρειάζεται πιστωτική κάρτα. Ξεκίνα δωρεάν σήμερα.</p>
       </section>
 
       {/* How it works */}
