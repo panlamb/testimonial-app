@@ -9,11 +9,6 @@ const FEATURES = [
   { icon: '🔒', title: 'GDPR compliant', desc: 'Συγκατάθεση, δικαίωμα διαγραφής, πολιτική απορρήτου. Όλα έτοιμα.' },
 ]
 
-const TESTIMONIALS = [
-  { name: 'Μαρία Παπαδοπούλου', business: 'Κομμωτήριο Μαρία', text: 'Πριν το Fimi, οι κριτικές μου ήταν μόνο στο Google. Τώρα τις βλέπουν όλοι στο site μου.', stars: 5 },
-  { name: 'Νίκος Αλεξίου', business: 'Personal Trainer', text: 'Έστειλα τον σύνδεσμο σε 10 πελάτες και σε 2 μέρες είχα 8 κριτικές στο site μου. Απίστευτα εύκολο.', stars: 5 },
-  { name: 'Ελένη Κωστοπούλου', business: 'Εστιατόριο Η Ελένη', text: 'Το widget λειτουργεί τέλεια. Οι πελάτες μου λένε ότι τους κάνει να εμπιστεύονται περισσότερο.', stars: 5 },
-]
 
 export default function Landing() {
   return (
@@ -136,32 +131,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-24">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <p className="text-indigo-400 text-sm font-semibold tracking-widest mb-3">Κριτικές</p>
-            <h2 className="text-4xl font-bold text-white">Τι λένε οι χρήστες μας</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t) => (
-              <div key={t.name} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-indigo-500/30 transition">
-                <div className="text-amber-400 text-base mb-4 tracking-wide">{'★'.repeat(t.stars)}</div>
-                <p className="text-gray-300 text-sm leading-relaxed mb-6">"{t.text}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-300 text-xs font-bold">
-                    {t.name[0]}
-                  </div>
-                  <div>
-                    <p className="font-medium text-white text-sm">{t.name}</p>
-                    <p className="text-xs text-gray-500">{t.business}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* CTA */}
       <section className="py-24 relative overflow-hidden">
