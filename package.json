@@ -4,8 +4,8 @@
   "description": "Testimonial & Social Proof Collector",
   "main": "server/index.js",
   "scripts": {
-    "start": "node --no-warnings=ExperimentalWarning server/index.js",
-    "dev:server": "nodemon --exec 'node --no-warnings=ExperimentalWarning' server/index.js",
+    "start": "node --experimental-sqlite --no-warnings=ExperimentalWarning server/index.js",
+    "dev:server": "nodemon --exec 'node --experimental-sqlite --no-warnings=ExperimentalWarning' server/index.js",
     "dev:client": "cd client && npm run dev",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "build": "cd client && npm run build",
