@@ -43,9 +43,13 @@ export default function WallPage() {
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20">
         {/* Header */}
         <div className="text-center mb-16">
-          <span className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent block mb-8">
-            Fimi
-          </span>
+          {business.brand_logo_url ? (
+            <img src={business.brand_logo_url} alt={business.brand_name || business.name} className="h-10 mx-auto object-contain mb-8" />
+          ) : (
+            <span className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent block mb-8">
+              {business.brand_name || 'Fimi'}
+            </span>
+          )}
           <p className="text-indigo-400 text-sm font-semibold tracking-widest mb-4">Wall of Love</p>
           <h1 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
             Τι λένε για{' '}
@@ -101,7 +105,7 @@ export default function WallPage() {
           </div>
         )}
 
-        {business.plan === 'free' && (
+        {business.plan === 'free' && !business.brand_name && (
           <p className="text-center text-xs text-gray-600 mt-16">
             Powered by{' '}
             <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent font-semibold">

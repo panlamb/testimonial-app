@@ -105,9 +105,13 @@ export default function CollectPage() {
       <div className="relative max-w-lg mx-auto">
         {/* Logo */}
         <div className="text-center mb-8">
-          <span className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
-            Fimi
-          </span>
+          {business.brand_logo_url ? (
+            <img src={business.brand_logo_url} alt={business.brand_name || business.name} className="h-10 mx-auto object-contain" />
+          ) : (
+            <span className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
+              {business.brand_name || 'Fimi'}
+            </span>
+          )}
         </div>
 
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
@@ -204,12 +208,14 @@ export default function CollectPage() {
           </form>
         </div>
 
-        <p className="text-center text-xs text-gray-600 mt-6">
-          Powered by{' '}
-          <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent font-semibold">
-            Fimi
-          </span>
-        </p>
+        {!business.brand_name && (
+          <p className="text-center text-xs text-gray-600 mt-6">
+            Powered by{' '}
+            <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent font-semibold">
+              Fimi
+            </span>
+          </p>
+        )}
       </div>
     </div>
   )

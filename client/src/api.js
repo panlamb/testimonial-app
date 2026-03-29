@@ -28,6 +28,7 @@ export const api = {
     updateStatus: (id, status) =>
       request(`/dashboard/testimonials/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) }),
     delete: (id) => request(`/dashboard/testimonials/${id}`, { method: 'DELETE' }),
+    updateBranding: (body) => request('/dashboard/branding', { method: 'PUT', body: JSON.stringify(body) }),
   },
   collect: {
     getPage: (slug) => request(`/collect/${slug}`),

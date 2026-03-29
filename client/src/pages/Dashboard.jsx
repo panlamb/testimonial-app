@@ -11,12 +11,15 @@ export default function Dashboard() {
   const [filter, setFilter] = useState('all')
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState('')
+  const [branding, setBranding] = useState({ brand_name: '', brand_logo_url: '' })
+  const [brandingSaved, setBrandingSaved] = useState(false)
   const navigate = useNavigate()
 
   const loadData = useCallback(async () => {
     try {
       const [biz, tests] = await Promise.all([api.dashboard.me(), api.dashboard.testimonials()])
       setBusiness(biz)
+      setBranding({ brand_name: biz.brand_name || '', brand_logo_url: biz.brand_logo_url || '' })
       setTestimonials(tests)
     } catch {
       navigate('/login')
@@ -24,6 +27,14 @@ export default function Dashboard() {
       setLoading(false)
     }
   }, [navigate])
+
+  async function handleBrandingSave(e) {
+    e.preventDefault()
+    await api.dashboard.updateBranding(branding)
+    setBusiness((prev) => ({ ...prev, ...branding }))
+    setBrandingSaved(true)
+    setTimeout(() => setBrandingSaved(false), 2000)
+  }
 
   useEffect(() => { loadData() }, [loadData])
 
@@ -123,6 +134,37 @@ export default function Dashboard() {
               copied={copied === 'widget'}
               isCode
             />
+          </div>
+        </section>
+
+        {/* White Label Branding */}
+        <section>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+            White Label Branding
+          </h2>
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <p className="text-sm text-gray-500 mb-4">
+              Αντικατάστησε το "Fimi" με το δικό σου brand στις σελίδες των πελατών σου.
+            </p>
+            <form onSubmit={handleBrandingSave} className="flex flex-col sm:flex-row gap-3">
+              <input
+                type="text"
+                placeholder="Όνομα brand (π.χ. Acme Agency)"
+                value={branding.brand_name}
+                onChange={(e) => setBranding({ ...branding, brand_name: e.target.value })}
+                className="input flex-1"
+              />
+              <input
+                type="url"
+                placeholder="URL logo (προαιρετικό)"
+                value={branding.brand_logo_url}
+                onChange={(e) => setBranding({ ...branding, brand_logo_url: e.target.value })}
+                className="input flex-1"
+              />
+              <button type="submit" className="btn-primary shrink-0">
+                {brandingSaved ? 'Αποθηκεύτηκε!' : 'Αποθήκευση'}
+              </button>
+            </form>
           </div>
         </section>
 

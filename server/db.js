@@ -44,6 +44,8 @@ for (const col of [
   'ALTER TABLE testimonials ADD COLUMN customer_email TEXT',
   'ALTER TABLE testimonials ADD COLUMN consent_given_at DATETIME',
   'ALTER TABLE testimonials ADD COLUMN delete_token TEXT UNIQUE',
+  'ALTER TABLE businesses ADD COLUMN brand_name TEXT',
+  'ALTER TABLE businesses ADD COLUMN brand_logo_url TEXT',
 ]) {
   try { db.exec(col) } catch {}
 }

@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/:slug', (req, res) => {
   const business = db.prepare(
-    'SELECT id, name, slug, plan FROM businesses WHERE slug = ?'
+    'SELECT id, name, slug, plan, brand_name, brand_logo_url FROM businesses WHERE slug = ?'
   ).get(req.params.slug);
   if (!business) return res.status(404).json({ error: 'Page not found' });
 
@@ -20,7 +20,7 @@ router.get('/:slug', (req, res) => {
   }
 
   res.json({
-    business: { name: business.name, slug: business.slug, plan: business.plan },
+    business: { name: business.name, slug: business.slug, plan: business.plan, brand_name: business.brand_name, brand_logo_url: business.brand_logo_url },
     testimonials,
   });
 });

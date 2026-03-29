@@ -7,10 +7,18 @@ router.use(authMiddleware);
 
 router.get('/me', (req, res) => {
   const business = db.prepare(
-    'SELECT id, name, email, slug, plan, created_at FROM businesses WHERE id = ?'
+    'SELECT id, name, email, slug, plan, brand_name, brand_logo_url, created_at FROM businesses WHERE id = ?'
   ).get(req.businessId);
   if (!business) return res.status(404).json({ error: 'Not found' });
   res.json(business);
+});
+
+router.put('/branding', (req, res) => {
+  const { brand_name, brand_logo_url } = req.body || {};
+  db.prepare(
+    'UPDATE businesses SET brand_name = ?, brand_logo_url = ? WHERE id = ?'
+  ).run(brand_name?.trim() || null, brand_logo_url?.trim() || null, req.businessId);
+  res.json({ success: true });
 });
 
 router.get('/testimonials', (req, res) => {
