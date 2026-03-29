@@ -7,6 +7,7 @@ const FEATURES = [
   { icon: '🔌', title: 'Embed σε οποιοδήποτε site', desc: 'Αντιγράφεις ένα κομμάτι κώδικα και οι κριτικές εμφανίζονται στο site σου.' },
   { icon: '📸', title: 'Screenshots Google & Facebook', desc: 'Οι πελάτες ανεβάζουν screenshot από την κριτική τους απευθείας.' },
   { icon: '🔒', title: 'GDPR compliant', desc: 'Συγκατάθεση, δικαίωμα διαγραφής, πολιτική απορρήτου. Όλα έτοιμα.' },
+  { icon: '🏷️', title: 'White Label', desc: 'Βάλε το δικό σου brand στις σελίδες των πελατών σου. Ιδανικό για web designers και agencies.' },
 ]
 
 
