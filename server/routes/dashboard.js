@@ -1,6 +1,9 @@
 const express = require('express');
+const { Resend } = require('resend');
 const db = require('../db');
 const { authMiddleware } = require('../middleware/auth');
+
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 const router = express.Router();
 router.use(authMiddleware);
@@ -54,6 +57,50 @@ router.put('/testimonials/:id/status', (req, res) => {
 
   db.prepare('UPDATE testimonials SET status = ? WHERE id = ?').run(status, req.params.id);
   res.json({ success: true });
+});
+
+router.post('/request-review', async (req, res) => {
+  if (!resend) return res.status(503).json({ error: 'Email service not configured' });
+
+  const { customer_email, customer_name } = req.body || {};
+  if (!customer_email) return res.status(400).json({ error: 'Customer email is required' });
+
+  const business = db.prepare(
+    'SELECT name, slug, brand_name FROM businesses WHERE id = ?'
+  ).get(req.businessId);
+
+  const brandName = business.brand_name || business.name;
+  const collectUrl = `${req.protocol}://${req.get('host')}/collect/${business.slug}`;
+  const greeting = customer_name ? `Hi ${customer_name},` : 'Hi,';
+
+  try {
+    await resend.emails.send({
+      from: 'Fimi <onboarding@resend.dev>',
+      to: customer_email,
+      subject: `How was your experience with ${brandName}?`,
+      html: `
+        <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;background:#f9fafb;border-radius:12px">
+          <h2 style="margin:0 0 16px;color:#1e1b4b">${brandName}</h2>
+          <p style="color:#374151;margin:0 0 12px">${greeting}</p>
+          <p style="color:#374151;margin:0 0 24px">
+            Thank you for choosing ${brandName}. We'd love to hear about your experience —
+            it only takes 30 seconds and helps us a lot.
+          </p>
+          <a href="${collectUrl}" style="background:#4f46e5;color:#fff;text-decoration:none;padding:14px 28px;border-radius:8px;font-weight:600;display:inline-block;font-size:16px">
+            Leave a review →
+          </a>
+          <p style="color:#9ca3af;font-size:12px;margin-top:32px">
+            You received this email because you interacted with ${brandName}.<br/>
+            If you don't want to leave a review, simply ignore this email.
+          </p>
+        </div>
+      `,
+    });
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Review request email error:', err);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
 });
 
 router.delete('/testimonials/:id', (req, res) => {

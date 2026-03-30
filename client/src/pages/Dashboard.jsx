@@ -18,6 +18,8 @@ export default function Dashboard() {
     cardBg: '#ffffff', textColor: '#374151', nameColor: '#111827', starsColor: '#f59e0b', borderColor: '#e5e7eb',
   })
   const [widgetSaved, setWidgetSaved] = useState(false)
+  const [reviewRequest, setReviewRequest] = useState({ customer_email: '', customer_name: '' })
+  const [reviewRequestStatus, setReviewRequestStatus] = useState('')
   const qrRef = useRef(null)
   const navigate = useNavigate()
 
@@ -63,6 +65,20 @@ export default function Dashboard() {
     if (!window.confirm('Permanently delete this testimonial?')) return
     await api.dashboard.delete(id)
     setTestimonials((prev) => prev.filter((t) => t.id !== id))
+  }
+
+  async function handleReviewRequest(e) {
+    e.preventDefault()
+    setReviewRequestStatus('sending')
+    try {
+      await api.dashboard.requestReview(reviewRequest)
+      setReviewRequestStatus('sent')
+      setReviewRequest({ customer_email: '', customer_name: '' })
+      setTimeout(() => setReviewRequestStatus(''), 3000)
+    } catch {
+      setReviewRequestStatus('error')
+      setTimeout(() => setReviewRequestStatus(''), 3000)
+    }
   }
 
   function downloadQR() {
@@ -160,6 +176,45 @@ export default function Dashboard() {
               copied={copied === 'widget'}
               isCode
             />
+          </div>
+        </section>
+
+        {/* Request a Review */}
+        <section>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+            Request a Review
+          </h2>
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <p className="text-sm text-gray-500 mb-4">
+              Send a review request email directly to a customer.
+            </p>
+            <form onSubmit={handleReviewRequest} className="flex flex-col sm:flex-row gap-3">
+              <input
+                type="text"
+                placeholder="Customer name (optional)"
+                value={reviewRequest.customer_name}
+                onChange={(e) => setReviewRequest({ ...reviewRequest, customer_name: e.target.value })}
+                className="input flex-1"
+              />
+              <input
+                type="email"
+                placeholder="Customer email"
+                value={reviewRequest.customer_email}
+                onChange={(e) => setReviewRequest({ ...reviewRequest, customer_email: e.target.value })}
+                className="input flex-1"
+                required
+              />
+              <button
+                type="submit"
+                disabled={reviewRequestStatus === 'sending'}
+                className="btn-primary shrink-0"
+              >
+                {reviewRequestStatus === 'sending' ? 'Sending…'
+                  : reviewRequestStatus === 'sent' ? 'Sent!'
+                  : reviewRequestStatus === 'error' ? 'Failed — retry'
+                  : 'Send Request'}
+              </button>
+            </form>
           </div>
         </section>
 

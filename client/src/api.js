@@ -30,6 +30,7 @@ export const api = {
     delete: (id) => request(`/dashboard/testimonials/${id}`, { method: 'DELETE' }),
     updateBranding: (body) => request('/dashboard/branding', { method: 'PUT', body: JSON.stringify(body) }),
     updateWidgetSettings: (body) => request('/dashboard/widget-settings', { method: 'PUT', body: JSON.stringify(body) }),
+    requestReview: (body) => request('/dashboard/request-review', { method: 'POST', body: JSON.stringify(body) }),
   },
   collect: {
     getPage: (slug) => request(`/collect/${slug}`),
