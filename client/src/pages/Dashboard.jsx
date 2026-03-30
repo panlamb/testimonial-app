@@ -158,25 +158,25 @@ export default function Dashboard() {
           </h2>
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <p className="text-sm text-gray-500 mb-4">
-              Αντικατάστησε το "Fimi" με το δικό σου brand στις σελίδες των πελατών σου.
+              Replace "Fimi" with your own brand on your customers' pages.
             </p>
             <form onSubmit={handleBrandingSave} className="flex flex-col sm:flex-row gap-3">
               <input
                 type="text"
-                placeholder="Όνομα brand (π.χ. Acme Agency)"
+                placeholder="Brand name (e.g. Acme Agency)"
                 value={branding.brand_name}
                 onChange={(e) => setBranding({ ...branding, brand_name: e.target.value })}
                 className="input flex-1"
               />
               <input
                 type="url"
-                placeholder="URL logo (προαιρετικό)"
+                placeholder="Logo URL (optional)"
                 value={branding.brand_logo_url}
                 onChange={(e) => setBranding({ ...branding, brand_logo_url: e.target.value })}
                 className="input flex-1"
               />
               <button type="submit" className="btn-primary shrink-0">
-                {brandingSaved ? 'Αποθηκεύτηκε!' : 'Αποθήκευση'}
+                {brandingSaved ? 'Saved!' : 'Save'}
               </button>
             </form>
           </div>
@@ -212,7 +212,7 @@ export default function Dashboard() {
                 ))}
               </div>
               <button type="submit" className="btn-primary">
-                {widgetSaved ? 'Αποθηκεύτηκε!' : 'Αποθήκευση'}
+                {widgetSaved ? 'Saved!' : 'Save'}
               </button>
             </form>
           </div>
