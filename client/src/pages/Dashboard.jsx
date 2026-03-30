@@ -185,20 +185,20 @@ export default function Dashboard() {
         {/* Widget Appearance */}
         <section>
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            Εμφάνιση Widget
+            Widget Appearance
           </h2>
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <p className="text-sm text-gray-500 mb-4">
-              Προσάρμοσε τα χρώματα του widget στα χρώματα του site σου.
+              Customize the widget colors to match your site's branding.
             </p>
             <form onSubmit={handleWidgetSettingsSave}>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-4">
                 {[
-                  { key: 'cardBg', label: 'Φόντο κάρτας' },
-                  { key: 'borderColor', label: 'Περίγραμμα' },
-                  { key: 'textColor', label: 'Κείμενο' },
-                  { key: 'nameColor', label: 'Όνομα' },
-                  { key: 'starsColor', label: 'Αστέρια' },
+                  { key: 'cardBg', label: 'Card background' },
+                  { key: 'borderColor', label: 'Border' },
+                  { key: 'textColor', label: 'Text' },
+                  { key: 'nameColor', label: 'Name' },
+                  { key: 'starsColor', label: 'Stars' },
                 ].map(({ key, label }) => (
                   <div key={key} className="flex flex-col items-center gap-2">
                     <input
