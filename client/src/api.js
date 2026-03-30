@@ -31,6 +31,7 @@ export const api = {
     updateBranding: (body) => request('/dashboard/branding', { method: 'PUT', body: JSON.stringify(body) }),
     updateWidgetSettings: (body) => request('/dashboard/widget-settings', { method: 'PUT', body: JSON.stringify(body) }),
     requestReview: (body) => request('/dashboard/request-review', { method: 'POST', body: JSON.stringify(body) }),
+    analytics: () => request('/dashboard/analytics'),
   },
   collect: {
     getPage: (slug) => request(`/collect/${slug}`),

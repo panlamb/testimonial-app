@@ -81,6 +81,7 @@ router.get('/:slug', (req, res) => {
     'SELECT id, name, slug, brand_name, brand_logo_url FROM businesses WHERE slug = ?'
   ).get(req.params.slug);
   if (!business) return res.status(404).json({ error: 'Page not found' });
+  db.prepare('INSERT INTO page_views (business_id, page_type) VALUES (?, ?)').run(business.id, 'collect');
   res.json(business);
 });
 

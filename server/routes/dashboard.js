@@ -59,6 +59,34 @@ router.put('/testimonials/:id/status', (req, res) => {
   res.json({ success: true });
 });
 
+router.get('/analytics', (req, res) => {
+  const views = db.prepare(`
+    SELECT page_type, COUNT(*) as count FROM page_views
+    WHERE business_id = ? GROUP BY page_type
+  `).all(req.businessId);
+
+  const viewMap = Object.fromEntries(views.map((v) => [v.page_type, v.count]));
+
+  const submissions = db.prepare(
+    'SELECT COUNT(*) as count FROM testimonials WHERE business_id = ?'
+  ).get(req.businessId).count;
+
+  const approved = db.prepare(
+    "SELECT COUNT(*) as count FROM testimonials WHERE business_id = ? AND status = 'approved'"
+  ).get(req.businessId).count;
+
+  const collectViews = viewMap.collect || 0;
+
+  res.json({
+    collect_views: collectViews,
+    wall_views: viewMap.wall || 0,
+    widget_loads: viewMap.widget || 0,
+    submissions,
+    approved,
+    conversion_rate: collectViews > 0 ? Math.round((submissions / collectViews) * 100) : 0,
+  });
+});
+
 router.post('/request-review', async (req, res) => {
   if (!resend) return res.status(503).json({ error: 'Email service not configured' });
 

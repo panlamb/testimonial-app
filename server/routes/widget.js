@@ -14,6 +14,7 @@ router.get('/:slug.js', (req, res) => {
   if (!business) {
     return res.send('console.error("[TestimonialApp] Widget: business not found");');
   }
+  db.prepare('INSERT INTO page_views (business_id, page_type) VALUES (?, ?)').run(business.id, 'widget');
 
   let testimonials = db.prepare(
     `SELECT customer_name, review_text, rating, screenshot_url, created_at

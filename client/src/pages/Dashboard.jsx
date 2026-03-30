@@ -14,6 +14,7 @@ export default function Dashboard() {
   const [copied, setCopied] = useState('')
   const [branding, setBranding] = useState({ brand_name: '', brand_logo_url: '' })
   const [brandingSaved, setBrandingSaved] = useState(false)
+  const [analytics, setAnalytics] = useState(null)
   const [widgetSettings, setWidgetSettings] = useState({
     cardBg: '#ffffff', textColor: '#374151', nameColor: '#111827', starsColor: '#f59e0b', borderColor: '#e5e7eb',
   })
@@ -25,8 +26,9 @@ export default function Dashboard() {
 
   const loadData = useCallback(async () => {
     try {
-      const [biz, tests] = await Promise.all([api.dashboard.me(), api.dashboard.testimonials()])
+      const [biz, tests, analyticsData] = await Promise.all([api.dashboard.me(), api.dashboard.testimonials(), api.dashboard.analytics()])
       setBusiness(biz)
+      setAnalytics(analyticsData)
       setBranding({ brand_name: biz.brand_name || '', brand_logo_url: biz.brand_logo_url || '' })
       if (biz.widget_settings) {
         setWidgetSettings((prev) => ({ ...prev, ...biz.widget_settings }))
@@ -304,6 +306,30 @@ export default function Dashboard() {
             </form>
           </div>
         </section>
+
+        {/* Analytics */}
+        {analytics && (
+          <section>
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              Analytics
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {[
+                { label: 'Collect Views', val: analytics.collect_views, color: 'text-indigo-600' },
+                { label: 'Wall Views', val: analytics.wall_views, color: 'text-violet-600' },
+                { label: 'Widget Loads', val: analytics.widget_loads, color: 'text-purple-600' },
+                { label: 'Submissions', val: analytics.submissions, color: 'text-blue-600' },
+                { label: 'Approved', val: analytics.approved, color: 'text-green-600' },
+                { label: 'Conversion', val: `${analytics.conversion_rate}%`, color: 'text-amber-600' },
+              ].map((s) => (
+                <div key={s.label} className="bg-white rounded-xl border border-gray-200 p-4 text-center">
+                  <div className={`text-2xl font-bold ${s.color}`}>{s.val}</div>
+                  <div className="text-xs text-gray-500 mt-1">{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Stats */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
