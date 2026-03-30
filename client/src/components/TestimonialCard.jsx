@@ -1,4 +1,5 @@
 import StarRating from './StarRating'
+import ShareableCard from './ShareableCard'
 
 const STATUS_STYLES = {
   pending: 'bg-yellow-100 text-yellow-800',
@@ -7,7 +8,7 @@ const STATUS_STYLES = {
   hidden: 'bg-gray-100 text-gray-600',
 }
 
-export default function TestimonialCard({ testimonial: t, showActions, onStatusChange, onDelete }) {
+export default function TestimonialCard({ testimonial: t, showActions, onStatusChange, onDelete, businessName }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm flex flex-col gap-3">
       {t.screenshot_url && (
@@ -47,6 +48,9 @@ export default function TestimonialCard({ testimonial: t, showActions, onStatusC
           )}
           {t.status !== 'pending' && (
             <ActionBtn color="yellow" onClick={() => onStatusChange(t.id, 'pending')}>Reset</ActionBtn>
+          )}
+          {t.status === 'approved' && (
+            <ShareableCard testimonial={t} businessName={businessName} />
           )}
           <button
             onClick={() => onDelete(t.id)}

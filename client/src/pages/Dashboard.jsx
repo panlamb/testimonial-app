@@ -361,6 +361,7 @@ export default function Dashboard() {
                   showActions
                   onStatusChange={handleStatusChange}
                   onDelete={handleDelete}
+                  businessName={business.brand_name || business.name}
                 />
               ))}
             </div>
