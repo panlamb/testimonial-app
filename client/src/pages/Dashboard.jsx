@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { QRCodeCanvas } from 'qrcode.react'
 import { api } from '../api'
 import TestimonialCard from '../components/TestimonialCard'
 
@@ -17,6 +18,7 @@ export default function Dashboard() {
     cardBg: '#ffffff', textColor: '#374151', nameColor: '#111827', starsColor: '#f59e0b', borderColor: '#e5e7eb',
   })
   const [widgetSaved, setWidgetSaved] = useState(false)
+  const qrRef = useRef(null)
   const navigate = useNavigate()
 
   const loadData = useCallback(async () => {
@@ -61,6 +63,16 @@ export default function Dashboard() {
     if (!window.confirm('Permanently delete this testimonial?')) return
     await api.dashboard.delete(id)
     setTestimonials((prev) => prev.filter((t) => t.id !== id))
+  }
+
+  function downloadQR() {
+    const canvas = qrRef.current?.querySelector('canvas')
+    if (!canvas) return
+    const url = canvas.toDataURL('image/png')
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `fimi-qr-${business.slug}.png`
+    a.click()
   }
 
   function copy(text, key) {
@@ -148,6 +160,26 @@ export default function Dashboard() {
               copied={copied === 'widget'}
               isCode
             />
+          </div>
+        </section>
+
+        {/* QR Code */}
+        <section>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+            QR Code
+          </h2>
+          <div className="bg-white rounded-xl border border-gray-200 p-5 flex flex-col sm:flex-row items-center gap-6">
+            <div ref={qrRef} className="shrink-0">
+              <QRCodeCanvas value={collectUrl} size={140} includeMargin />
+            </div>
+            <div className="flex flex-col gap-2">
+              <p className="text-sm text-gray-600">
+                Print this QR code and place it at your counter, on receipts, or business cards. Customers scan it and leave a review instantly.
+              </p>
+              <button onClick={downloadQR} className="btn-primary self-start">
+                Download PNG
+              </button>
+            </div>
           </div>
         </section>
 
