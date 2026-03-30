@@ -8,7 +8,7 @@ router.get('/:slug.js', (req, res) => {
   res.setHeader('Cache-Control', 'public, max-age=60');
 
   const business = db.prepare(
-    'SELECT id, name, slug, plan FROM businesses WHERE slug = ?'
+    'SELECT id, name, slug, plan, widget_settings FROM businesses WHERE slug = ?'
   ).get(req.params.slug);
 
   if (!business) {
@@ -34,20 +34,30 @@ router.get('/:slug.js', (req, res) => {
     screenshot_url: t.screenshot_url ? `${origin}${t.screenshot_url}` : null,
   }));
 
-  const payload = JSON.stringify({ business: { name: business.name, slug: business.slug }, testimonials, showBadge });
+  const ws = business.widget_settings ? JSON.parse(business.widget_settings) : {};
+  const colors = {
+    cardBg: ws.cardBg || '#ffffff',
+    textColor: ws.textColor || '#374151',
+    nameColor: ws.nameColor || '#111827',
+    starsColor: ws.starsColor || '#f59e0b',
+    borderColor: ws.borderColor || '#e5e7eb',
+  };
+
+  const payload = JSON.stringify({ business: { name: business.name, slug: business.slug }, testimonials, showBadge, colors });
 
   res.send(`
 (function () {
   var _tw = ${payload};
 
+  var c = _tw.colors;
   var style = document.createElement('style');
   style.textContent = [
     '.tw-wrap{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:20px;box-sizing:border-box}',
     '.tw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}',
-    '.tw-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}',
-    '.tw-stars{color:#f59e0b;font-size:18px;letter-spacing:2px;margin-bottom:8px}',
-    '.tw-text{color:#374151;font-size:14px;line-height:1.6;margin:0 0 12px}',
-    '.tw-name{font-weight:600;color:#111827;font-size:14px}',
+    '.tw-card{background:' + c.cardBg + ';border:1px solid ' + c.borderColor + ';border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}',
+    '.tw-stars{color:' + c.starsColor + ';font-size:18px;letter-spacing:2px;margin-bottom:8px}',
+    '.tw-text{color:' + c.textColor + ';font-size:14px;line-height:1.6;margin:0 0 12px}',
+    '.tw-name{font-weight:600;color:' + c.nameColor + ';font-size:14px}',
     '.tw-img{width:100%;border-radius:8px;margin-bottom:12px;max-height:200px;object-fit:cover}',
     '.tw-badge{text-align:center;margin-top:16px;font-size:11px;color:#9ca3af}',
     '.tw-badge a{color:#6b7280;text-decoration:none}',

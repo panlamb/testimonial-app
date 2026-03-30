@@ -13,6 +13,10 @@ export default function Dashboard() {
   const [copied, setCopied] = useState('')
   const [branding, setBranding] = useState({ brand_name: '', brand_logo_url: '' })
   const [brandingSaved, setBrandingSaved] = useState(false)
+  const [widgetSettings, setWidgetSettings] = useState({
+    cardBg: '#ffffff', textColor: '#374151', nameColor: '#111827', starsColor: '#f59e0b', borderColor: '#e5e7eb',
+  })
+  const [widgetSaved, setWidgetSaved] = useState(false)
   const navigate = useNavigate()
 
   const loadData = useCallback(async () => {
@@ -20,6 +24,9 @@ export default function Dashboard() {
       const [biz, tests] = await Promise.all([api.dashboard.me(), api.dashboard.testimonials()])
       setBusiness(biz)
       setBranding({ brand_name: biz.brand_name || '', brand_logo_url: biz.brand_logo_url || '' })
+      if (biz.widget_settings) {
+        setWidgetSettings((prev) => ({ ...prev, ...biz.widget_settings }))
+      }
       setTestimonials(tests)
     } catch {
       navigate('/login')
@@ -27,6 +34,13 @@ export default function Dashboard() {
       setLoading(false)
     }
   }, [navigate])
+
+  async function handleWidgetSettingsSave(e) {
+    e.preventDefault()
+    await api.dashboard.updateWidgetSettings(widgetSettings)
+    setWidgetSaved(true)
+    setTimeout(() => setWidgetSaved(false), 2000)
+  }
 
   async function handleBrandingSave(e) {
     e.preventDefault()
@@ -163,6 +177,42 @@ export default function Dashboard() {
               />
               <button type="submit" className="btn-primary shrink-0">
                 {brandingSaved ? 'Αποθηκεύτηκε!' : 'Αποθήκευση'}
+              </button>
+            </form>
+          </div>
+        </section>
+
+        {/* Widget Appearance */}
+        <section>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+            Εμφάνιση Widget
+          </h2>
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <p className="text-sm text-gray-500 mb-4">
+              Προσάρμοσε τα χρώματα του widget στα χρώματα του site σου.
+            </p>
+            <form onSubmit={handleWidgetSettingsSave}>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-4">
+                {[
+                  { key: 'cardBg', label: 'Φόντο κάρτας' },
+                  { key: 'borderColor', label: 'Περίγραμμα' },
+                  { key: 'textColor', label: 'Κείμενο' },
+                  { key: 'nameColor', label: 'Όνομα' },
+                  { key: 'starsColor', label: 'Αστέρια' },
+                ].map(({ key, label }) => (
+                  <div key={key} className="flex flex-col items-center gap-2">
+                    <input
+                      type="color"
+                      value={widgetSettings[key]}
+                      onChange={(e) => setWidgetSettings((prev) => ({ ...prev, [key]: e.target.value }))}
+                      className="w-12 h-12 rounded-lg border border-gray-200 cursor-pointer p-0.5"
+                    />
+                    <span className="text-xs text-gray-500 text-center">{label}</span>
+                  </div>
+                ))}
+              </div>
+              <button type="submit" className="btn-primary">
+                {widgetSaved ? 'Αποθηκεύτηκε!' : 'Αποθήκευση'}
               </button>
             </form>
           </div>

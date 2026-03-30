@@ -7,10 +7,22 @@ router.use(authMiddleware);
 
 router.get('/me', (req, res) => {
   const business = db.prepare(
-    'SELECT id, name, email, slug, plan, brand_name, brand_logo_url, created_at FROM businesses WHERE id = ?'
+    'SELECT id, name, email, slug, plan, brand_name, brand_logo_url, widget_settings, created_at FROM businesses WHERE id = ?'
   ).get(req.businessId);
   if (!business) return res.status(404).json({ error: 'Not found' });
+  business.widget_settings = business.widget_settings ? JSON.parse(business.widget_settings) : null;
   res.json(business);
+});
+
+router.put('/widget-settings', (req, res) => {
+  const allowed = ['cardBg', 'textColor', 'nameColor', 'starsColor', 'borderColor'];
+  const settings = {};
+  for (const key of allowed) {
+    if (req.body?.[key]) settings[key] = req.body[key];
+  }
+  db.prepare('UPDATE businesses SET widget_settings = ? WHERE id = ?')
+    .run(JSON.stringify(settings), req.businessId);
+  res.json({ success: true });
 });
 
 router.put('/branding', (req, res) => {

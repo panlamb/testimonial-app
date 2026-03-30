@@ -46,6 +46,7 @@ for (const col of [
   'ALTER TABLE testimonials ADD COLUMN delete_token TEXT UNIQUE',
   'ALTER TABLE businesses ADD COLUMN brand_name TEXT',
   'ALTER TABLE businesses ADD COLUMN brand_logo_url TEXT',
+  'ALTER TABLE businesses ADD COLUMN widget_settings TEXT',
 ]) {
   try { db.exec(col) } catch {}
 }
