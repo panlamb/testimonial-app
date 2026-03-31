@@ -16,8 +16,8 @@ export default function WallPage() {
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-white mb-2">Η σελίδα δεν βρέθηκε</h2>
-          <p className="text-gray-400">Αυτό το wall δεν υπάρχει.</p>
+          <h2 className="text-2xl font-bold text-white mb-2">Page not found</h2>
+          <p className="text-gray-400">This wall does not exist.</p>
         </div>
       </div>
     )
@@ -26,7 +26,7 @@ export default function WallPage() {
   if (!data) {
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center text-gray-400">
-        Φόρτωση…
+        Loading…
       </div>
     )
   }
@@ -52,15 +52,14 @@ export default function WallPage() {
           )}
           <p className="text-indigo-400 text-sm font-semibold tracking-widest mb-4">Wall of Love</p>
           <h1 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
-            Τι λένε για{' '}
+            What people say about{' '}
             <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
               {business.name}
             </span>
           </h1>
           {testimonials.length > 0 && (
             <p className="text-gray-500 mt-4">
-              {testimonials.length} ικανοποιημένοι{' '}
-              {testimonials.length === 1 ? 'πελάτης' : 'πελάτες'}
+              {testimonials.length} happy {testimonials.length === 1 ? 'customer' : 'customers'}
             </p>
           )}
         </div>
@@ -69,7 +68,7 @@ export default function WallPage() {
         {testimonials.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-5xl mb-4">⭐</div>
-            <p className="text-gray-500">Δεν υπάρχουν εγκεκριμένες κριτικές ακόμα.</p>
+            <p className="text-gray-500">No approved reviews yet.</p>
           </div>
         ) : (
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-5">
@@ -101,7 +100,7 @@ export default function WallPage() {
                       )}
                     </div>
                     <p className="text-xs text-gray-500">
-                      {new Date(t.created_at).toLocaleDateString('el-GR')}
+                      {new Date(t.created_at).toLocaleDateString('en-GB')}
                     </p>
                   </div>
                 </div>
