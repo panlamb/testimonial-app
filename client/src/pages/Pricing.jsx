@@ -116,6 +116,18 @@ export default function Pricing() {
         </p>
       </section>
 
+      {/* Launch week banner */}
+      <div className="max-w-2xl mx-auto px-6 pb-8">
+        <div className="bg-indigo-600/10 border border-indigo-500/30 rounded-2xl px-6 py-4 text-center">
+          <p className="text-sm text-indigo-300">
+            🚀 <strong className="text-white">Launch week offer</strong> — first 50 signups get 3 extra free months on Pro.{' '}
+            <Link to="/register" className="underline text-indigo-300 hover:text-white">
+              Claim your spot →
+            </Link>
+          </p>
+        </div>
+      </div>
+
       {/* Plans */}
       <section className="max-w-6xl mx-auto px-6 pb-24">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">

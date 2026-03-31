@@ -14,6 +14,8 @@ import Help from './pages/Help'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import TermsOfService from './pages/TermsOfService'
+import NotFound from './pages/NotFound'
+import CookieConsent from './components/CookieConsent'
 
 function PrivateRoute({ children }) {
   return localStorage.getItem('token') ? children : <Navigate to="/login" replace />
@@ -25,22 +27,26 @@ function AdminRoute({ children }) {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-      <Route path="/collect/:slug" element={<CollectPage />} />
-      <Route path="/wall/:slug" element={<WallPage />} />
-      <Route path="/pricing" element={<Pricing />} />
-      <Route path="/help" element={<Help />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/terms" element={<TermsOfService />} />
-      <Route path="/privacy" element={<PrivacyPolicy />} />
-      <Route path="/delete/:token" element={<DeleteTestimonial />} />
-      <Route path="/admin" element={<AdminLogin />} />
-      <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-    </Routes>
+    <>
+      <CookieConsent />
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path="/collect/:slug" element={<CollectPage />} />
+        <Route path="/wall/:slug" element={<WallPage />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/delete/:token" element={<DeleteTestimonial />} />
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   )
 }

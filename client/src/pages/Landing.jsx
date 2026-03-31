@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 
 function FaqItem({ q, a }) {
   const [open, setOpen] = useState(false)
@@ -68,8 +68,21 @@ const UNIQUE = [
 
 
 export default function Landing() {
+  const [searchParams] = useSearchParams()
+  const isFromPH = searchParams.get('ref') === 'producthunt'
+
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white">
+
+      {/* Product Hunt banner */}
+      {isFromPH && (
+        <div className="bg-indigo-600 text-white text-sm text-center py-2.5 px-4">
+          👋 Hey Product Hunter! Start your free 30-day trial — no credit card required.{' '}
+          <Link to="/register" className="underline font-semibold hover:text-indigo-200">
+            Get started →
+          </Link>
+        </div>
+      )}
 
       {/* Nav */}
       <nav className="border-b border-white/10 px-6 py-4 sticky top-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-md">
