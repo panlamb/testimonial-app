@@ -5,8 +5,10 @@ const FEATURES = [
   { icon: '✅', title: 'You decide', desc: 'Every review goes through you first. Approve only what you want published.' },
   { icon: '🌐', title: 'Wall of Love', desc: 'Automatic public page showcasing all your approved testimonials.' },
   { icon: '🔌', title: 'Embed widget', desc: 'One line of code and testimonials appear live on your website.' },
-  { icon: '📊', title: 'Dynamic Trust Badge', desc: 'Embeddable badge showing your live rating and review count — like Trustpilot, but yours.' },
+  { icon: '🔴', title: 'Private negative review handling', desc: '1-2 star reviews are kept private and sent to you directly — so you can fix the issue before it ever goes public.' },
+  { icon: '🔗', title: 'Google Review redirect', desc: 'Happy customers are prompted to also leave a Google Review right after submitting — doubling your public presence.' },
   { icon: '🤖', title: 'AI Summary', desc: 'Generate a ready-to-use marketing paragraph from all your reviews. Perfect for LinkedIn and your website.' },
+  { icon: '📊', title: 'Dynamic Trust Badge', desc: 'Embeddable badge showing your live rating and review count — like Trustpilot, but yours.' },
   { icon: '✓', title: 'Verified Customer badge', desc: 'Reviews submitted via email request are automatically marked as Verified — boosting trust.' },
   { icon: '📧', title: 'Review request emails', desc: 'Send a personalised review request directly to a customer\'s inbox with one click.' },
   { icon: '📱', title: 'QR Code generator', desc: 'Print your QR code at the counter, on receipts, or business cards for instant in-person reviews.' },
@@ -20,19 +22,19 @@ const FEATURES = [
 
 const UNIQUE = [
   {
+    icon: '🔴',
+    title: 'Negative reviews stay private',
+    desc: '1-2 star reviews never go public. Instead, you get an immediate private email with the customer\'s contact details so you can reach out, fix the issue, and turn a critic into a fan — before any damage is done.',
+  },
+  {
+    icon: '🔗',
+    title: 'Google Review redirect',
+    desc: 'After a happy customer submits their testimonial, Fimi prompts them to also leave a Google Review with one tap. You get the testimonial on your site and a real Google review that boosts your SEO — automatically.',
+  },
+  {
     icon: '🤖',
     title: 'AI-powered marketing copy',
     desc: 'Fimi reads all your approved reviews and writes a polished 2-3 sentence summary you can paste anywhere — your website, a LinkedIn post, an email campaign. Ready in seconds.',
-  },
-  {
-    icon: '✓',
-    title: 'Verified Customer badge',
-    desc: 'When you send a review request email, the resulting testimonial is automatically marked as Verified. Visitors see a trust signal that anonymous review platforms can\'t match.',
-  },
-  {
-    icon: '📊',
-    title: 'Your own Trust Badge',
-    desc: 'A live, embeddable badge that shows your current average rating and total reviews — updating automatically as new reviews come in. No Trustpilot subscription needed.',
   },
 ]
 
@@ -110,7 +112,7 @@ export default function Landing() {
           {/* Stats bar */}
           <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 mt-14">
             {[
-              { val: '15+', label: 'features' },
+              { val: '17+', label: 'features' },
               { val: '30', label: 'day free trial' },
               { val: '5min', label: 'setup time' },
               { val: '100%', label: 'GDPR compliant' },
