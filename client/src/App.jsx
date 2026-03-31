@@ -11,6 +11,8 @@ import AdminDashboard from './pages/AdminDashboard'
 import Landing from './pages/Landing'
 import Pricing from './pages/Pricing'
 import Help from './pages/Help'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
 function PrivateRoute({ children }) {
   return localStorage.getItem('token') ? children : <Navigate to="/login" replace />
@@ -31,6 +33,8 @@ export default function App() {
       <Route path="/wall/:slug" element={<WallPage />} />
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/help" element={<Help />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/delete/:token" element={<DeleteTestimonial />} />
       <Route path="/admin" element={<AdminLogin />} />

@@ -58,6 +58,11 @@ export default function Login() {
               placeholder="••••••••"
               required
             />
+            <div className="text-right mt-1">
+              <Link to="/forgot-password" className="text-xs text-indigo-500 hover:underline">
+                Forgot password?
+              </Link>
+            </div>
           </Field>
           <button type="submit" disabled={loading} className="btn-primary w-full mt-2">
             {loading ? 'Signing in…' : 'Sign In'}

@@ -73,6 +73,58 @@ router.post('/register', (req, res) => {
   }
 });
 
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body || {};
+  if (!email) return res.status(400).json({ error: 'Email is required' });
+
+  const business = db.prepare('SELECT id, name, email FROM businesses WHERE email = ?').get(email);
+  // Always respond with success to avoid email enumeration
+  if (!business || !resend) return res.json({ success: true });
+
+  const token = require('crypto').randomBytes(32).toString('hex');
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString(); // 1 hour
+
+  db.prepare('DELETE FROM password_resets WHERE business_id = ?').run(business.id);
+  db.prepare('INSERT INTO password_resets (business_id, token, expires_at) VALUES (?, ?, ?)').run(business.id, token, expiresAt);
+
+  const resetUrl = `${process.env.APP_URL || 'https://testimonial-app-production.up.railway.app'}/reset-password?token=${token}`;
+
+  await resend.emails.send({
+    from: 'Fimi <onboarding@resend.dev>',
+    to: business.email,
+    subject: 'Reset your Fimi password',
+    html: `
+      <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;background:#f9fafb;border-radius:12px">
+        <h2 style="margin:0 0 8px;color:#1e1b4b">Reset your password</h2>
+        <p style="color:#6b7280;margin:0 0 24px">Hi ${business.name}, click the button below to set a new password. This link expires in 1 hour.</p>
+        <a href="${resetUrl}" style="background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;display:inline-block">
+          Reset password →
+        </a>
+        <p style="color:#9ca3af;font-size:12px;margin-top:24px">If you didn't request this, you can safely ignore this email.</p>
+      </div>
+    `,
+  }).catch((err) => console.error('Password reset email error:', err));
+
+  res.json({ success: true });
+});
+
+router.post('/reset-password', (req, res) => {
+  const { token, password } = req.body || {};
+  if (!token || !password) return res.status(400).json({ error: 'Token and password are required' });
+  if (password.length < 6) return res.status(400).json({ error: 'Password must be at least 6 characters' });
+
+  const reset = db.prepare(
+    'SELECT * FROM password_resets WHERE token = ? AND expires_at > CURRENT_TIMESTAMP'
+  ).get(token);
+  if (!reset) return res.status(400).json({ error: 'Invalid or expired reset link' });
+
+  const passwordHash = require('bcryptjs').hashSync(password, 10);
+  db.prepare('UPDATE businesses SET password_hash = ? WHERE id = ?').run(passwordHash, reset.business_id);
+  db.prepare('DELETE FROM password_resets WHERE id = ?').run(reset.id);
+
+  res.json({ success: true });
+});
+
 router.post('/login', (req, res) => {
   const { email, password } = req.body || {};
   if (!email || !password) {
