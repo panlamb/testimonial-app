@@ -78,7 +78,7 @@ export default function Landing() {
             <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
               Fimi
             </span>
-            <span className="text-[10px] text-gray-500 tracking-widest">φήμη · reputation</span>
+            <span className="text-[10px] text-gray-500 tracking-wide">φήμη · /ˈfi.mi/ · reputation</span>
           </div>
           <div className="flex items-center gap-4">
             <Link to="/pricing" className="text-sm text-gray-400 hover:text-white transition">
