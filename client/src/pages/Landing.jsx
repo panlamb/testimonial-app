@@ -22,6 +22,9 @@ export default function Landing() {
             Fimi
           </span>
           <div className="flex items-center gap-4">
+            <Link to="/pricing" className="text-sm text-gray-400 hover:text-white transition">
+              Pricing
+            </Link>
             <Link to="/login" className="text-sm text-gray-400 hover:text-white transition">
               Sign in
             </Link>
@@ -157,6 +160,7 @@ export default function Landing() {
       {/* Footer */}
       <footer className="border-t border-white/10 py-8 text-center text-sm text-gray-600">
         <div className="flex justify-center gap-6 mb-4">
+          <Link to="/pricing" className="hover:text-gray-300 transition">Pricing</Link>
           <Link to="/privacy" className="hover:text-gray-300 transition">Privacy Policy</Link>
           <Link to="/login" className="hover:text-gray-300 transition">Sign in</Link>
           <Link to="/register" className="hover:text-gray-300 transition">Sign up</Link>
