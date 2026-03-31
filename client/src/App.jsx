@@ -10,6 +10,7 @@ import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 import Landing from './pages/Landing'
 import Pricing from './pages/Pricing'
+import Help from './pages/Help'
 
 function PrivateRoute({ children }) {
   return localStorage.getItem('token') ? children : <Navigate to="/login" replace />
@@ -29,6 +30,7 @@ export default function App() {
       <Route path="/collect/:slug" element={<CollectPage />} />
       <Route path="/wall/:slug" element={<WallPage />} />
       <Route path="/pricing" element={<Pricing />} />
+      <Route path="/help" element={<Help />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/delete/:token" element={<DeleteTestimonial />} />
       <Route path="/admin" element={<AdminLogin />} />

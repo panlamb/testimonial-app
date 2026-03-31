@@ -164,16 +164,21 @@ export default function Dashboard() {
               {business.plan === 'paid' ? 'Pro' : 'Free'}
             </span>
           </div>
-          <button
-            onClick={() => {
-              localStorage.removeItem('token')
-              localStorage.removeItem('business')
-              navigate('/login')
-            }}
-            className="text-sm text-gray-500 hover:text-gray-800 shrink-0"
-          >
-            Sign out
-          </button>
+          <div className="flex items-center gap-4 shrink-0">
+            <a href="/help" target="_blank" rel="noreferrer" className="text-sm text-gray-500 hover:text-gray-800 transition">
+              Help
+            </a>
+            <button
+              onClick={() => {
+                localStorage.removeItem('token')
+                localStorage.removeItem('business')
+                navigate('/login')
+              }}
+              className="text-sm text-gray-500 hover:text-gray-800"
+            >
+              Sign out
+            </button>
+          </div>
         </div>
       </header>
 

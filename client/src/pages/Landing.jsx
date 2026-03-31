@@ -1,4 +1,23 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+
+function FaqItem({ q, a }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="bg-white/5 border border-white/10 rounded-2xl px-6 py-4">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full text-left flex items-start justify-between gap-4 group"
+      >
+        <span className="text-sm font-medium text-white group-hover:text-indigo-300 transition leading-relaxed">{q}</span>
+        <span className={`text-gray-500 shrink-0 transition-transform mt-0.5 text-lg leading-none ${open ? 'rotate-45' : ''}`}>+</span>
+      </button>
+      {open && (
+        <p className="text-sm text-gray-400 leading-relaxed mt-3">{a}</p>
+      )}
+    </div>
+  )
+}
 
 const FEATURES = [
   { icon: '⭐', title: 'Collect reviews', desc: 'Send a link to your customers. They leave a review in 30 seconds.' },
@@ -206,6 +225,48 @@ export default function Landing() {
       </section>
 
 
+      {/* FAQ */}
+      <section className="py-24 relative">
+        <div className="max-w-3xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <p className="text-indigo-400 text-sm font-semibold tracking-widest mb-3">FAQ</p>
+            <h2 className="text-4xl font-bold text-white">Common questions</h2>
+          </div>
+          <div className="space-y-3">
+            {[
+              {
+                q: 'Do I need technical skills to set up Fimi?',
+                a: 'No. Your collection page and Wall of Love are ready the moment you register. Embedding the widget on your website requires pasting one line of code — that\'s the most technical it gets.',
+              },
+              {
+                q: 'What happens if a customer leaves a 1 or 2 star review?',
+                a: 'It never goes public. You receive a private email with the customer\'s contact details so you can reach out and fix the issue. You can also generate an AI-written reply directly from your dashboard.',
+              },
+              {
+                q: 'How does the 30-day free trial work?',
+                a: 'Sign up and you get full Pro access for 30 days — no credit card required. At the end of the trial you can upgrade to keep your features, or stay on the free plan.',
+              },
+              {
+                q: 'Can I use my own brand instead of "Fimi"?',
+                a: 'Yes, on any paid plan. Go to Dashboard → White Label Branding, enter your brand name and logo URL. The "Powered by Fimi" badge disappears and your brand replaces it on all customer-facing pages.',
+              },
+              {
+                q: 'How does the Google Review redirect work?',
+                a: 'Paste your Google Review link in the dashboard. After a happy customer (3+ stars) submits their testimonial, they\'re prompted to also leave a Google Review with one tap — doubling your public presence automatically.',
+              },
+              {
+                q: 'Is my customers\' data GDPR compliant?',
+                a: 'Yes. Every submission requires explicit consent. Customers receive a unique deletion link so they can remove their data at any time. You can also delete any review from the dashboard.',
+              },
+            ].map((item) => <FaqItem key={item.q} {...item} />)}
+          </div>
+          <p className="text-center text-gray-600 text-sm mt-10">
+            More questions?{' '}
+            <Link to="/help" className="text-indigo-400 hover:underline">Read the full documentation →</Link>
+          </p>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-24 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
@@ -240,6 +301,7 @@ export default function Landing() {
       <footer className="border-t border-white/10 py-8 text-center text-sm text-gray-600">
         <div className="flex justify-center gap-6 mb-4">
           <Link to="/pricing" className="hover:text-gray-300 transition">Pricing</Link>
+          <Link to="/help" className="hover:text-gray-300 transition">Help</Link>
           <Link to="/privacy" className="hover:text-gray-300 transition">Privacy Policy</Link>
           <Link to="/login" className="hover:text-gray-300 transition">Sign in</Link>
           <Link to="/register" className="hover:text-gray-300 transition">Sign up</Link>

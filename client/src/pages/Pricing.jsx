@@ -187,6 +187,7 @@ export default function Pricing() {
       <footer className="border-t border-white/10 py-8 text-center text-sm text-gray-600">
         <div className="flex justify-center gap-6 mb-4">
           <Link to="/" className="hover:text-gray-300 transition">Home</Link>
+          <Link to="/help" className="hover:text-gray-300 transition">Help</Link>
           <Link to="/privacy" className="hover:text-gray-300 transition">Privacy Policy</Link>
           <Link to="/login" className="hover:text-gray-300 transition">Sign in</Link>
         </div>
