@@ -219,9 +219,9 @@ export default function CollectPage() {
                 <span className="text-xs text-gray-400 leading-relaxed">
                   I agree that my details may be stored and potentially published.
                   I can request deletion at any time. Read our{' '}
-                  <Link to="/privacy" target="_blank" className="text-indigo-400 underline">
-                    Privacy Policy
-                  </Link>.
+                  <Link to="/privacy" target="_blank" className="text-indigo-400 underline">Privacy Policy</Link>
+                  {' '}and{' '}
+                  <Link to="/terms" target="_blank" className="text-indigo-400 underline">Terms of Service</Link>.
                 </span>
               </label>
             </div>

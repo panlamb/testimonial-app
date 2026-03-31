@@ -308,7 +308,8 @@ export default function Landing() {
         <div className="flex justify-center gap-6 mb-4">
           <Link to="/pricing" className="hover:text-gray-300 transition">Pricing</Link>
           <Link to="/help" className="hover:text-gray-300 transition">Help</Link>
-          <Link to="/privacy" className="hover:text-gray-300 transition">Privacy Policy</Link>
+          <Link to="/terms" className="hover:text-gray-300 transition">Terms</Link>
+          <Link to="/privacy" className="hover:text-gray-300 transition">Privacy</Link>
           <Link to="/login" className="hover:text-gray-300 transition">Sign in</Link>
           <Link to="/register" className="hover:text-gray-300 transition">Sign up</Link>
         </div>

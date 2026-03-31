@@ -13,6 +13,7 @@ import Pricing from './pages/Pricing'
 import Help from './pages/Help'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
+import TermsOfService from './pages/TermsOfService'
 
 function PrivateRoute({ children }) {
   return localStorage.getItem('token') ? children : <Navigate to="/login" replace />
@@ -35,6 +36,7 @@ export default function App() {
       <Route path="/help" element={<Help />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/terms" element={<TermsOfService />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/delete/:token" element={<DeleteTestimonial />} />
       <Route path="/admin" element={<AdminLogin />} />
