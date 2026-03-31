@@ -3,11 +3,37 @@ import { Link } from 'react-router-dom'
 const FEATURES = [
   { icon: '⭐', title: 'Collect reviews', desc: 'Send a link to your customers. They leave a review in 30 seconds.' },
   { icon: '✅', title: 'You decide', desc: 'Every review goes through you first. Approve only what you want published.' },
-  { icon: '🌐', title: 'Wall of Love', desc: 'Automatic public page with all your approved testimonials.' },
-  { icon: '🔌', title: 'Embed anywhere', desc: 'Copy one line of code and testimonials appear on your website.' },
-  { icon: '📸', title: 'Google & Facebook screenshots', desc: 'Customers upload screenshots of their reviews directly.' },
-  { icon: '🔒', title: 'GDPR compliant', desc: 'Consent, right to deletion, privacy policy. All built in.' },
-  { icon: '🏷️', title: 'White Label', desc: 'Put your own brand on your customers\' pages. Perfect for web designers and agencies.' },
+  { icon: '🌐', title: 'Wall of Love', desc: 'Automatic public page showcasing all your approved testimonials.' },
+  { icon: '🔌', title: 'Embed widget', desc: 'One line of code and testimonials appear live on your website.' },
+  { icon: '📊', title: 'Dynamic Trust Badge', desc: 'Embeddable badge showing your live rating and review count — like Trustpilot, but yours.' },
+  { icon: '🤖', title: 'AI Summary', desc: 'Generate a ready-to-use marketing paragraph from all your reviews. Perfect for LinkedIn and your website.' },
+  { icon: '✓', title: 'Verified Customer badge', desc: 'Reviews submitted via email request are automatically marked as Verified — boosting trust.' },
+  { icon: '📧', title: 'Review request emails', desc: 'Send a personalised review request directly to a customer\'s inbox with one click.' },
+  { icon: '📱', title: 'QR Code generator', desc: 'Print your QR code at the counter, on receipts, or business cards for instant in-person reviews.' },
+  { icon: '🖼️', title: 'Shareable image cards', desc: 'Turn any testimonial into a beautiful image card ready to share on Instagram or LinkedIn.' },
+  { icon: '📈', title: 'Analytics', desc: 'Track collect page views, widget loads, submissions, and your conversion rate.' },
+  { icon: '📸', title: 'Screenshot uploads', desc: 'Customers can attach a screenshot of their Google or Facebook review directly.' },
+  { icon: '🎨', title: 'Widget customization', desc: 'Match the widget\'s colors to your brand with a simple color picker.' },
+  { icon: '🏷️', title: 'White Label', desc: 'Replace Fimi with your own brand. Ideal for web designers and agencies.' },
+  { icon: '🔒', title: 'GDPR compliant', desc: 'Consent checkbox, right to deletion, and privacy policy — all built in.' },
+]
+
+const UNIQUE = [
+  {
+    icon: '🤖',
+    title: 'AI-powered marketing copy',
+    desc: 'Fimi reads all your approved reviews and writes a polished 2-3 sentence summary you can paste anywhere — your website, a LinkedIn post, an email campaign. Ready in seconds.',
+  },
+  {
+    icon: '✓',
+    title: 'Verified Customer badge',
+    desc: 'When you send a review request email, the resulting testimonial is automatically marked as Verified. Visitors see a trust signal that anonymous review platforms can\'t match.',
+  },
+  {
+    icon: '📊',
+    title: 'Your own Trust Badge',
+    desc: 'A live, embeddable badge that shows your current average rating and total reviews — updating automatically as new reviews come in. No Trustpilot subscription needed.',
+  },
 ]
 
 
@@ -49,7 +75,7 @@ export default function Landing() {
         <div className="relative max-w-5xl mx-auto px-6 py-28 text-center">
           <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-indigo-300 text-xs font-medium px-4 py-2 rounded-full mb-8">
             <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-pulse" />
-            Get started free — no credit card required
+            30-day free trial — no credit card required
           </div>
 
           <h1 className="text-5xl sm:text-7xl font-bold leading-tight mb-6 tracking-tight">
@@ -61,8 +87,7 @@ export default function Landing() {
           </h1>
 
           <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Fimi collects testimonials from your customers and displays them
-            on your website automatically. In 5 minutes. No technical skills needed.
+            Fimi collects testimonials from your customers, displays them on your website automatically, and uses AI to turn them into marketing copy. In 5 minutes. No technical skills needed.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -70,17 +95,32 @@ export default function Landing() {
               to="/register"
               className="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-xl font-semibold text-lg transition shadow-xl shadow-indigo-900/50"
             >
-              Get started free →
+              Start free trial →
             </Link>
-            <a
-              href="#how-it-works"
+            <Link
+              to="/pricing"
               className="border border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 px-8 py-4 rounded-xl font-semibold text-lg transition"
             >
-              How it works
-            </a>
+              See pricing
+            </Link>
           </div>
 
-          <p className="text-sm text-gray-600 mt-5">No credit card required. Start free today.</p>
+          <p className="text-sm text-gray-600 mt-5">30-day free trial. No credit card required. Cancel anytime.</p>
+
+          {/* Stats bar */}
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 mt-14">
+            {[
+              { val: '15+', label: 'features' },
+              { val: '30', label: 'day free trial' },
+              { val: '5min', label: 'setup time' },
+              { val: '100%', label: 'GDPR compliant' },
+            ].map((s) => (
+              <div key={s.label} className="text-center">
+                <div className="text-2xl font-bold text-white">{s.val}</div>
+                <div className="text-xs text-gray-500 mt-0.5">{s.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -107,6 +147,25 @@ export default function Landing() {
                 </div>
                 <h3 className="font-semibold text-white text-lg mb-2">{s.title}</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Unique differentiators */}
+      <section className="py-24 relative">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <p className="text-violet-400 text-sm font-semibold tracking-widest mb-3">What sets us apart</p>
+            <h2 className="text-4xl font-bold text-white">Features you won't find elsewhere</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {UNIQUE.map((u) => (
+              <div key={u.title} className="bg-gradient-to-b from-indigo-600/10 to-transparent border border-indigo-500/20 rounded-2xl p-8 hover:border-indigo-500/40 transition">
+                <div className="text-3xl mb-4">{u.icon}</div>
+                <h3 className="font-bold text-white text-lg mb-3">{u.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{u.desc}</p>
               </div>
             ))}
           </div>
@@ -145,15 +204,24 @@ export default function Landing() {
           <h2 className="text-4xl sm:text-5xl font-bold text-white mb-5 leading-tight">
             Ready to show off<br />your reputation?
           </h2>
-          <p className="text-gray-400 text-lg mb-10">
-            Start free today. No credit card required.
+          <p className="text-gray-400 text-lg mb-8">
+            Join and get 30 days of full access — free. No credit card required.
           </p>
-          <Link
-            to="/register"
-            className="inline-block bg-indigo-600 hover:bg-indigo-500 text-white px-10 py-4 rounded-xl font-semibold text-lg transition shadow-xl shadow-indigo-900/50"
-          >
-            Create a free account →
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/register"
+              className="inline-block bg-indigo-600 hover:bg-indigo-500 text-white px-10 py-4 rounded-xl font-semibold text-lg transition shadow-xl shadow-indigo-900/50"
+            >
+              Start your free trial →
+            </Link>
+            <Link
+              to="/pricing"
+              className="inline-block border border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 px-10 py-4 rounded-xl font-semibold text-lg transition"
+            >
+              See pricing
+            </Link>
+          </div>
+          <p className="text-sm text-gray-600 mt-5">30-day free trial · No credit card · Cancel anytime</p>
         </div>
       </section>
 
