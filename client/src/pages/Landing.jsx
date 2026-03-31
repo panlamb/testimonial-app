@@ -74,11 +74,14 @@ export default function Landing() {
       {/* Nav */}
       <nav className="border-b border-white/10 px-6 py-4 sticky top-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex flex-col leading-tight">
-            <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
-              Fimi
-            </span>
-            <span className="text-[10px] text-gray-500 tracking-wide">φήμη · /ˈfi.mi/ · reputation</span>
+          <div className="flex items-center gap-2.5">
+            <img src="/logo.png" alt="Fimi" className="h-8 w-8 rounded-lg" />
+            <div className="flex flex-col leading-tight">
+              <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
+                Fimi
+              </span>
+              <span className="text-[10px] text-gray-500 tracking-wide">φήμη · /ˈfi.mi/ · reputation</span>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <Link to="/pricing" className="text-sm text-gray-400 hover:text-white transition">
