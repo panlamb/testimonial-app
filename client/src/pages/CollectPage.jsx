@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, useSearchParams, Link } from 'react-router-dom'
 import { api } from '../api'
 import StarRating from '../components/StarRating'
 
 export default function CollectPage() {
   const { slug } = useParams()
+  const [searchParams] = useSearchParams()
+  const isVerified = searchParams.get('v') === '1'
   const [business, setBusiness] = useState(null)
   const [notFound, setNotFound] = useState(false)
   const [form, setForm] = useState({ customer_name: '', customer_email: '', review_text: '', rating: 0, consent: false })
@@ -40,6 +42,7 @@ export default function CollectPage() {
       fd.append('rating', form.rating)
       fd.append('consent', 'true')
       if (screenshot) fd.append('screenshot', screenshot)
+      if (isVerified) fd.append('verified', '1')
       const result = await api.collect.submit(slug, fd)
       setDeleteToken(result.deleteToken)
       setSubmitted(true)

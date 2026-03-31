@@ -59,6 +59,7 @@ for (const col of [
   'ALTER TABLE businesses ADD COLUMN widget_settings TEXT',
   'ALTER TABLE businesses ADD COLUMN trial_ends_at DATETIME',
   'ALTER TABLE businesses ADD COLUMN trial_notified INTEGER DEFAULT 0',
+  'ALTER TABLE testimonials ADD COLUMN verified INTEGER DEFAULT 0',
 ]) {
   try { db.exec(col) } catch {}
 }

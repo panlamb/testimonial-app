@@ -94,7 +94,12 @@ export default function WallPage() {
                     {t.customer_name[0].toUpperCase()}
                   </div>
                   <div>
-                    <p className="font-medium text-white text-sm">{t.customer_name}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium text-white text-sm">{t.customer_name}</p>
+                      {t.verified === 1 && (
+                        <span className="text-xs bg-green-500/20 text-green-400 border border-green-500/30 px-1.5 py-0.5 rounded-full">✓ Verified</span>
+                      )}
+                    </div>
                     <p className="text-xs text-gray-500">
                       {new Date(t.created_at).toLocaleDateString('el-GR')}
                     </p>

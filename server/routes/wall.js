@@ -11,7 +11,7 @@ router.get('/:slug', (req, res) => {
   db.prepare('INSERT INTO page_views (business_id, page_type) VALUES (?, ?)').run(business.id, 'wall');
 
   let testimonials = db.prepare(
-    `SELECT id, customer_name, review_text, rating, screenshot_url, created_at
+    `SELECT id, customer_name, review_text, rating, screenshot_url, verified, created_at
      FROM testimonials WHERE business_id = ? AND status = 'approved'
      ORDER BY created_at DESC`
   ).all(business.id);

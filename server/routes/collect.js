@@ -89,7 +89,7 @@ router.post('/:slug', upload.single('screenshot'), async (req, res) => {
   const business = db.prepare('SELECT id FROM businesses WHERE slug = ?').get(req.params.slug);
   if (!business) return res.status(404).json({ error: 'Page not found' });
 
-  const { customer_name, customer_email, review_text, rating, consent } = req.body || {};
+  const { customer_name, customer_email, review_text, rating, consent, verified } = req.body || {};
 
   if (!customer_name || !review_text || !rating) {
     return res.status(400).json({ error: 'Name, review, and rating are required' });
@@ -107,10 +107,11 @@ router.post('/:slug', upload.single('screenshot'), async (req, res) => {
     const screenshotUrl = await saveFile(req.file);
     const deleteToken = crypto.randomBytes(32).toString('hex');
 
+    const isVerified = verified === '1' ? 1 : 0;
     db.prepare(
       `INSERT INTO testimonials
-         (business_id, customer_name, customer_email, review_text, rating, screenshot_url, consent_given_at, delete_token)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+         (business_id, customer_name, customer_email, review_text, rating, screenshot_url, consent_given_at, delete_token, verified)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).run(
       business.id,
       customer_name.trim(),
@@ -119,7 +120,8 @@ router.post('/:slug', upload.single('screenshot'), async (req, res) => {
       ratingNum,
       screenshotUrl,
       new Date().toISOString(),
-      deleteToken
+      deleteToken,
+      isVerified
     );
 
     const owner = db.prepare('SELECT email, name FROM businesses WHERE id = ?').get(business.id);

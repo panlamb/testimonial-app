@@ -1,5 +1,6 @@
 const express = require('express');
 const { Resend } = require('resend');
+const Anthropic = require('@anthropic-ai/sdk');
 const db = require('../db');
 const { authMiddleware } = require('../middleware/auth');
 
@@ -59,6 +60,42 @@ router.put('/testimonials/:id/status', (req, res) => {
   res.json({ success: true });
 });
 
+router.post('/ai-summary', async (req, res) => {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return res.status(503).json({ error: 'AI service not configured' });
+  }
+
+  const testimonials = db.prepare(
+    `SELECT review_text, rating FROM testimonials
+     WHERE business_id = ? AND status = 'approved'
+     ORDER BY created_at DESC LIMIT 50`
+  ).all(req.businessId);
+
+  if (testimonials.length < 3) {
+    return res.status(400).json({ error: 'You need at least 3 approved testimonials to generate a summary.' });
+  }
+
+  const reviews = testimonials.map((t, i) => `${i + 1}. [${t.rating}/5 stars] "${t.review_text}"`).join('\n');
+
+  try {
+    const client = new Anthropic();
+    const message = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 300,
+      messages: [{
+        role: 'user',
+        content: `Based on these customer reviews, write a 2-3 sentence marketing summary that a business could use on their website or LinkedIn. Be specific, positive, and professional. Do not use generic phrases. Only return the summary text, nothing else.\n\nReviews:\n${reviews}`,
+      }],
+    });
+
+    const summary = message.content[0].text.trim();
+    res.json({ summary });
+  } catch (err) {
+    console.error('AI summary error:', err);
+    res.status(500).json({ error: 'Failed to generate summary' });
+  }
+});
+
 router.get('/analytics', (req, res) => {
   const views = db.prepare(`
     SELECT page_type, COUNT(*) as count FROM page_views
@@ -98,7 +135,7 @@ router.post('/request-review', async (req, res) => {
   ).get(req.businessId);
 
   const brandName = business.brand_name || business.name;
-  const collectUrl = `${req.protocol}://${req.get('host')}/collect/${business.slug}`;
+  const collectUrl = `${req.protocol}://${req.get('host')}/collect/${business.slug}?v=1`;
   const greeting = customer_name ? `Hi ${customer_name},` : 'Hi,';
 
   try {

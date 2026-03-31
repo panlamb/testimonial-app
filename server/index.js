@@ -17,6 +17,7 @@ app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/collect', require('./routes/collect'));
 app.use('/api/wall', require('./routes/wall'));
 app.use('/widget', require('./routes/widget'));
+app.use('/badge', require('./routes/badge'));
 app.use('/api/admin', require('./routes/admin').router);
 
 // Serve built React app in production

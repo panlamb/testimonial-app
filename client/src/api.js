@@ -32,6 +32,7 @@ export const api = {
     updateWidgetSettings: (body) => request('/dashboard/widget-settings', { method: 'PUT', body: JSON.stringify(body) }),
     requestReview: (body) => request('/dashboard/request-review', { method: 'POST', body: JSON.stringify(body) }),
     analytics: () => request('/dashboard/analytics'),
+    aiSummary: () => request('/dashboard/ai-summary', { method: 'POST' }),
   },
   collect: {
     getPage: (slug) => request(`/collect/${slug}`),

@@ -15,6 +15,9 @@ export default function Dashboard() {
   const [branding, setBranding] = useState({ brand_name: '', brand_logo_url: '' })
   const [brandingSaved, setBrandingSaved] = useState(false)
   const [analytics, setAnalytics] = useState(null)
+  const [aiSummary, setAiSummary] = useState('')
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiError, setAiError] = useState('')
   const [widgetSettings, setWidgetSettings] = useState({
     cardBg: '#ffffff', textColor: '#374151', nameColor: '#111827', starsColor: '#f59e0b', borderColor: '#e5e7eb',
   })
@@ -67,6 +70,19 @@ export default function Dashboard() {
     if (!window.confirm('Permanently delete this testimonial?')) return
     await api.dashboard.delete(id)
     setTestimonials((prev) => prev.filter((t) => t.id !== id))
+  }
+
+  async function handleAiSummary() {
+    setAiLoading(true)
+    setAiError('')
+    try {
+      const { summary } = await api.dashboard.aiSummary()
+      setAiSummary(summary)
+    } catch (err) {
+      setAiError(err.message)
+    } finally {
+      setAiLoading(false)
+    }
   }
 
   async function handleReviewRequest(e) {
@@ -268,6 +284,55 @@ export default function Dashboard() {
                 {brandingSaved ? 'Saved!' : 'Save'}
               </button>
             </form>
+          </div>
+        </section>
+
+        {/* AI Summary */}
+        <section>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+            AI Summary
+          </h2>
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <p className="text-sm text-gray-500 mb-4">
+              Generate a ready-to-use marketing paragraph from all your approved testimonials — perfect for your website, LinkedIn, or email campaigns.
+            </p>
+            {aiSummary && (
+              <div className="bg-indigo-50 border border-indigo-200 rounded-lg px-4 py-3 mb-4 text-sm text-indigo-900 leading-relaxed">
+                "{aiSummary}"
+                <button
+                  onClick={() => navigator.clipboard.writeText(aiSummary)}
+                  className="ml-3 text-xs text-indigo-500 hover:text-indigo-700 underline"
+                >
+                  Copy
+                </button>
+              </div>
+            )}
+            {aiError && (
+              <p className="text-sm text-red-500 mb-4">{aiError}</p>
+            )}
+            <button onClick={handleAiSummary} disabled={aiLoading} className="btn-primary">
+              {aiLoading ? 'Generating…' : aiSummary ? 'Regenerate' : 'Generate Summary'}
+            </button>
+          </div>
+        </section>
+
+        {/* Trust Badge */}
+        <section>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+            Dynamic Trust Badge
+          </h2>
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <p className="text-sm text-gray-500 mb-4">
+              Embed a live badge on your website that automatically shows your current rating and review count — like Trustpilot, but yours.
+            </p>
+            <ShareCard
+              title="Trust Badge"
+              subtitle="Paste into any website"
+              value={`<script src="${origin}/badge/${business.slug}.js"></script>`}
+              onCopy={() => copy(`<script src="${origin}/badge/${business.slug}.js"></script>`, 'badge')}
+              copied={copied === 'badge'}
+              isCode
+            />
           </div>
         </section>
 

@@ -21,11 +21,16 @@ export default function TestimonialCard({ testimonial: t, showActions, onStatusC
 
       <div className="flex items-start justify-between gap-2">
         <StarRating value={t.rating} readonly />
-        {showActions && (
-          <span className={`text-xs px-2 py-0.5 rounded-full font-medium shrink-0 ${STATUS_STYLES[t.status]}`}>
-            {t.status}
-          </span>
-        )}
+        <div className="flex items-center gap-1.5 shrink-0">
+          {t.verified === 1 && (
+            <span className="text-xs bg-green-50 text-green-700 border border-green-200 px-1.5 py-0.5 rounded-full">✓ Verified</span>
+          )}
+          {showActions && (
+            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_STYLES[t.status]}`}>
+              {t.status}
+            </span>
+          )}
+        </div>
       </div>
 
       <p className="text-gray-700 text-sm leading-relaxed">&ldquo;{t.review_text}&rdquo;</p>
