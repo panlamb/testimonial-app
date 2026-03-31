@@ -57,7 +57,72 @@ router.put('/testimonials/:id/status', (req, res) => {
   if (!t) return res.status(404).json({ error: 'Testimonial not found' });
 
   db.prepare('UPDATE testimonials SET status = ? WHERE id = ?').run(status, req.params.id);
+
+  if (status === 'approved' && resend) {
+    const approvedCount = db.prepare(
+      "SELECT COUNT(*) as count FROM testimonials WHERE business_id = ? AND status = 'approved'"
+    ).get(req.businessId).count;
+
+    const MILESTONES = [10, 25, 50, 100, 250, 500];
+    if (MILESTONES.includes(approvedCount)) {
+      const business = db.prepare('SELECT name, email, slug, brand_name FROM businesses WHERE id = ?').get(req.businessId);
+      const brandName = business.brand_name || business.name;
+      const wallUrl = `https://testimonial-app-production.up.railway.app/wall/${business.slug}`;
+      const linkedinPost = `🎉 We just hit ${approvedCount} customer reviews!\n\nHere's what people are saying about ${brandName}:\n👉 ${wallUrl}\n\nThank you to every customer who took the time to share their experience. It means everything to us.\n\n#CustomerLove #Testimonials #${brandName.replace(/\s+/g, '')}`;
+
+      resend.emails.send({
+        from: 'Fimi <onboarding@resend.dev>',
+        to: business.email,
+        subject: `🎉 You just hit ${approvedCount} reviews!`,
+        html: `
+          <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;background:#f9fafb;border-radius:12px">
+            <h2 style="margin:0 0 8px;color:#1e1b4b">Milestone reached! 🎉</h2>
+            <p style="color:#6b7280;margin:0 0 24px"><strong>${brandName}</strong> just hit <strong>${approvedCount} approved reviews</strong>. Time to shout about it!</p>
+            <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:20px;margin-bottom:24px">
+              <p style="font-size:12px;font-weight:600;color:#6b7280;margin:0 0 10px;text-transform:uppercase;letter-spacing:1px">Ready-to-post LinkedIn caption</p>
+              <p style="color:#374151;font-size:14px;line-height:1.7;white-space:pre-wrap;margin:0">${linkedinPost}</p>
+            </div>
+            <a href="${wallUrl}" style="background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;display:inline-block">
+              View your Wall of Love →
+            </a>
+          </div>
+        `,
+      }).catch((err) => console.error('Milestone email error:', err));
+    }
+  }
+
   res.json({ success: true });
+});
+
+router.post('/ai-reply/:id', async (req, res) => {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return res.status(503).json({ error: 'AI service not configured' });
+  }
+
+  const t = db.prepare(
+    'SELECT customer_name, review_text, rating FROM testimonials WHERE id = ? AND business_id = ?'
+  ).get(req.params.id, req.businessId);
+  if (!t) return res.status(404).json({ error: 'Not found' });
+
+  const business = db.prepare('SELECT name, brand_name FROM businesses WHERE id = ?').get(req.businessId);
+  const brandName = business.brand_name || business.name;
+
+  try {
+    const client = new Anthropic();
+    const message = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 200,
+      messages: [{
+        role: 'user',
+        content: `A customer left a ${t.rating}/5 star private review for "${brandName}": "${t.review_text}"\n\nWrite a short, empathetic, professional reply (3-4 sentences) to send directly to this customer. Acknowledge their experience, apologize sincerely, and offer to make it right. Address them as "${t.customer_name}". Sign off as "${brandName} team". Return only the reply text.`,
+      }],
+    });
+
+    res.json({ reply: message.content[0].text.trim() });
+  } catch (err) {
+    console.error('AI reply error:', err);
+    res.status(500).json({ error: 'Failed to generate reply' });
+  }
 });
 
 router.post('/ai-summary', async (req, res) => {

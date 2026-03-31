@@ -33,6 +33,7 @@ export const api = {
     requestReview: (body) => request('/dashboard/request-review', { method: 'POST', body: JSON.stringify(body) }),
     analytics: () => request('/dashboard/analytics'),
     aiSummary: () => request('/dashboard/ai-summary', { method: 'POST' }),
+    aiReply: (id) => request(`/dashboard/ai-reply/${id}`, { method: 'POST' }),
   },
   collect: {
     getPage: (slug) => request(`/collect/${slug}`),

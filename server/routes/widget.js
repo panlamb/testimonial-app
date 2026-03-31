@@ -102,6 +102,73 @@ router.get('/:slug.js', (req, res) => {
   }
   html += '</div>';
   target.innerHTML = html;
+
+  // Exit intent — show popup when cursor leaves top of page
+  (function () {
+    var _shown = false;
+    var _collectUrl = '${origin}/collect/${req.params.slug}';
+
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99998;align-items:center;justify-content:center';
+    var box = document.createElement('div');
+    box.style.cssText = 'background:#fff;border-radius:16px;padding:32px 28px;max-width:380px;width:90%;text-align:center;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;position:relative';
+
+    var closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.style.cssText = 'position:absolute;top:12px;right:14px;background:none;border:none;font-size:18px;cursor:pointer;color:#9ca3af';
+    closeBtn.onclick = function () { overlay.style.display = 'none'; };
+
+    var heading = document.createElement('p');
+    heading.style.cssText = 'font-size:22px;font-weight:700;color:#111827;margin:0 0 8px';
+    heading.textContent = 'Before you go…';
+
+    var sub = document.createElement('p');
+    sub.style.cssText = 'font-size:14px;color:#6b7280;margin:0 0 20px;line-height:1.5';
+    sub.textContent = 'How was your experience with ' + esc(_tw.business.name) + '? It only takes 30 seconds.';
+
+    var starsRow = document.createElement('div');
+    starsRow.style.cssText = 'display:flex;justify-content:center;gap:8px;margin-bottom:8px';
+    [1,2,3,4,5].forEach(function (n) {
+      var s = document.createElement('span');
+      s.textContent = '★';
+      s.style.cssText = 'font-size:36px;cursor:pointer;color:#d1d5db;transition:color .15s';
+      s.onmouseover = function () {
+        starsRow.querySelectorAll('span').forEach(function (el, i) {
+          el.style.color = i < n ? '#f59e0b' : '#d1d5db';
+        });
+      };
+      s.onmouseout = function () {
+        starsRow.querySelectorAll('span').forEach(function (el) { el.style.color = '#d1d5db'; });
+      };
+      s.onclick = function () {
+        overlay.style.display = 'none';
+        window.location.href = _collectUrl + '?rating=' + n;
+      };
+      starsRow.appendChild(s);
+    });
+
+    var hint = document.createElement('p');
+    hint.style.cssText = 'font-size:12px;color:#9ca3af;margin:0';
+    hint.textContent = 'Click a star to leave your review';
+
+    box.appendChild(closeBtn);
+    box.appendChild(heading);
+    box.appendChild(sub);
+    box.appendChild(starsRow);
+    box.appendChild(hint);
+    overlay.appendChild(box);
+    overlay.style.display = 'flex';
+    overlay.style.display = 'none';
+    document.body.appendChild(overlay);
+
+    document.addEventListener('mouseleave', function (e) {
+      if (_shown) return;
+      if (e.clientY < 0) {
+        _shown = true;
+        overlay.style.display = 'flex';
+      }
+    });
+  })();
 })();
 `);
 });

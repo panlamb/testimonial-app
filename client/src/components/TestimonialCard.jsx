@@ -8,7 +8,7 @@ const STATUS_STYLES = {
   hidden: 'bg-gray-100 text-gray-600',
 }
 
-export default function TestimonialCard({ testimonial: t, showActions, onStatusChange, onDelete, businessName }) {
+export default function TestimonialCard({ testimonial: t, showActions, onStatusChange, onDelete, businessName, onAiReply, aiReply, aiReplyLoading }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm flex flex-col gap-3">
       {t.screenshot_url && (
@@ -39,6 +39,44 @@ export default function TestimonialCard({ testimonial: t, showActions, onStatusC
         <p className="font-semibold text-gray-900 text-sm">{t.customer_name}</p>
         <p className="text-xs text-gray-400 mt-0.5">{new Date(t.created_at).toLocaleDateString()}</p>
       </div>
+
+      {/* AI Reply (hidden testimonials) */}
+      {showActions && t.status === 'hidden' && onAiReply && (
+        <div className="border-t border-gray-100 pt-3">
+          {aiReply ? (
+            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 text-xs text-indigo-900 leading-relaxed mb-2">
+              {aiReply}
+            </div>
+          ) : null}
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => onAiReply(t.id)}
+              disabled={aiReplyLoading}
+              className="text-xs px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition disabled:opacity-50"
+            >
+              {aiReplyLoading ? 'Generating…' : aiReply ? 'Regenerate Reply' : '🤖 Generate Reply'}
+            </button>
+            {aiReply && (
+              <>
+                <button
+                  onClick={() => navigator.clipboard.writeText(aiReply)}
+                  className="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition"
+                >
+                  Copy
+                </button>
+                {t.customer_email && (
+                  <a
+                    href={`mailto:${t.customer_email}?subject=Re: Your feedback&body=${encodeURIComponent(aiReply)}`}
+                    className="text-xs px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg transition"
+                  >
+                    Send Email
+                  </a>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {showActions && (
         <div className="flex flex-wrap gap-2 pt-3 border-t border-gray-100">

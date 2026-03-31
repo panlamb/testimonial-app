@@ -6,11 +6,15 @@ const FEATURES = [
   { icon: '🌐', title: 'Wall of Love', desc: 'Automatic public page showcasing all your approved testimonials.' },
   { icon: '🔌', title: 'Embed widget', desc: 'One line of code and testimonials appear live on your website.' },
   { icon: '🔴', title: 'Private negative review handling', desc: '1-2 star reviews are kept private and sent to you directly — so you can fix the issue before it ever goes public.' },
+  { icon: '🤖', title: 'AI reply to negative reviews', desc: 'Generate an empathetic, professional reply to any unhappy customer with one click — then send it straight from your dashboard.' },
   { icon: '🔗', title: 'Google Review redirect', desc: 'Happy customers are prompted to also leave a Google Review right after submitting — doubling your public presence.' },
-  { icon: '🤖', title: 'AI Summary', desc: 'Generate a ready-to-use marketing paragraph from all your reviews. Perfect for LinkedIn and your website.' },
+  { icon: '💬', title: 'WhatsApp review requests', desc: 'Send a pre-written review request directly from your phone via WhatsApp — no email needed.' },
+  { icon: '📧', title: 'Email review requests', desc: 'Send a personalised review request to a customer\'s inbox with one click. Replied-via-email reviews are automatically marked Verified.' },
+  { icon: '🚪', title: 'Exit intent capture', desc: 'When a visitor is about to leave your site, a subtle popup invites them to rate their experience — without interrupting their visit.' },
+  { icon: '🏆', title: 'Milestone celebration posts', desc: 'Hit 10, 25, 50 or 100 reviews? Fimi emails you a ready-to-post LinkedIn caption so you can celebrate publicly in seconds.' },
+  { icon: '🧠', title: 'AI Summary', desc: 'Generate a ready-to-use marketing paragraph from all your reviews. Perfect for LinkedIn and your website.' },
   { icon: '📊', title: 'Dynamic Trust Badge', desc: 'Embeddable badge showing your live rating and review count — like Trustpilot, but yours.' },
   { icon: '✓', title: 'Verified Customer badge', desc: 'Reviews submitted via email request are automatically marked as Verified — boosting trust.' },
-  { icon: '📧', title: 'Review request emails', desc: 'Send a personalised review request directly to a customer\'s inbox with one click.' },
   { icon: '📱', title: 'QR Code generator', desc: 'Print your QR code at the counter, on receipts, or business cards for instant in-person reviews.' },
   { icon: '🖼️', title: 'Shareable image cards', desc: 'Turn any testimonial into a beautiful image card ready to share on Instagram or LinkedIn.' },
   { icon: '📈', title: 'Analytics', desc: 'Track collect page views, widget loads, submissions, and your conversion rate.' },
@@ -23,18 +27,23 @@ const FEATURES = [
 const UNIQUE = [
   {
     icon: '🔴',
-    title: 'Negative reviews stay private',
-    desc: '1-2 star reviews never go public. Instead, you get an immediate private email with the customer\'s contact details so you can reach out, fix the issue, and turn a critic into a fan — before any damage is done.',
+    title: 'Full negative review management',
+    desc: '1-2 star reviews never go public. Instead, you get a private email with the customer\'s contact details — and with one click, Fimi\'s AI writes you an empathetic reply ready to send. Turn critics into fans before any damage is done.',
+  },
+  {
+    icon: '🚪',
+    title: 'Exit intent review capture',
+    desc: 'When a visitor is about to leave a page where your widget is embedded, Fimi shows a subtle star-rating popup. One tap and they\'re on your review page. Most tools wait for customers to come to you — Fimi catches them on the way out.',
+  },
+  {
+    icon: '🏆',
+    title: 'Milestone LinkedIn posts — automated',
+    desc: 'Every time you hit 10, 25, 50, 100, 250 or 500 approved reviews, Fimi emails you a ready-to-post LinkedIn caption. Celebrate your social proof publicly without spending 20 minutes writing the post yourself.',
   },
   {
     icon: '🔗',
     title: 'Google Review redirect',
     desc: 'After a happy customer submits their testimonial, Fimi prompts them to also leave a Google Review with one tap. You get the testimonial on your site and a real Google review that boosts your SEO — automatically.',
-  },
-  {
-    icon: '🤖',
-    title: 'AI-powered marketing copy',
-    desc: 'Fimi reads all your approved reviews and writes a polished 2-3 sentence summary you can paste anywhere — your website, a LinkedIn post, an email campaign. Ready in seconds.',
   },
 ]
 
@@ -89,7 +98,7 @@ export default function Landing() {
           </h1>
 
           <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Fimi collects testimonials from your customers, displays them on your website automatically, and uses AI to turn them into marketing copy. In 5 minutes. No technical skills needed.
+            Fimi collects testimonials from your customers, displays them on your website automatically, and uses AI to turn them into marketing copy — and to handle unhappy customers. In 5 minutes. No technical skills needed.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -112,7 +121,7 @@ export default function Landing() {
           {/* Stats bar */}
           <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 mt-14">
             {[
-              { val: '17+', label: 'features' },
+              { val: '21+', label: 'features' },
               { val: '30', label: 'day free trial' },
               { val: '5min', label: 'setup time' },
               { val: '100%', label: 'GDPR compliant' },
@@ -162,7 +171,7 @@ export default function Landing() {
             <p className="text-violet-400 text-sm font-semibold tracking-widest mb-3">What sets us apart</p>
             <h2 className="text-4xl font-bold text-white">Features you won't find elsewhere</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {UNIQUE.map((u) => (
               <div key={u.title} className="bg-gradient-to-b from-indigo-600/10 to-transparent border border-indigo-500/20 rounded-2xl p-8 hover:border-indigo-500/40 transition">
                 <div className="text-3xl mb-4">{u.icon}</div>
