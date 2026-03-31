@@ -14,6 +14,7 @@ export default function CollectPage() {
   const [preview, setPreview] = useState(null)
   const [submitted, setSubmitted] = useState(false)
   const [deleteToken, setDeleteToken] = useState(null)
+  const [isNegative, setIsNegative] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -45,6 +46,7 @@ export default function CollectPage() {
       if (isVerified) fd.append('verified', '1')
       const result = await api.collect.submit(slug, fd)
       setDeleteToken(result.deleteToken)
+      setIsNegative(result.isNegative || false)
       setSubmitted(true)
     } catch (err) {
       setError(err.message)
@@ -70,12 +72,35 @@ export default function CollectPage() {
 
   if (submitted) {
     const deleteUrl = `${window.location.origin}/delete/${deleteToken}`
+    const showGooglePrompt = !isNegative && business.google_review_url
     return (
       <Dark>
         <div className="bg-white/5 border border-white/10 rounded-2xl p-10 max-w-md w-full text-center">
-          <div className="text-5xl mb-4">🎉</div>
+          <div className="text-5xl mb-4">{isNegative ? '🙏' : '🎉'}</div>
           <h2 className="text-2xl font-bold text-white mb-2">Ευχαριστούμε!</h2>
-          <p className="text-gray-400 mb-8">Η κριτική σας υποβλήθηκε και αναμένει έγκριση.</p>
+          <p className="text-gray-400 mb-6">
+            {isNegative
+              ? 'Λάβαμε τα σχόλιά σας. Η ομάδα μας θα επικοινωνήσει μαζί σας σύντομα.'
+              : 'Η κριτική σας υποβλήθηκε και αναμένει έγκριση.'}
+          </p>
+
+          {showGooglePrompt && (
+            <div className="bg-indigo-600/10 border border-indigo-500/30 rounded-xl p-5 mb-6 text-left">
+              <p className="text-sm font-semibold text-white mb-1">Ένα ακόμα βήμα! ⭐</p>
+              <p className="text-xs text-gray-400 mb-3">
+                Αν θέλετε να βοηθήσετε κι άλλο, αφήστε μας και μια κριτική στο Google — διαρκεί μόνο 30 δευτερόλεπτα.
+              </p>
+              <a
+                href={business.google_review_url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+              >
+                Αφήστε Google Review →
+              </a>
+            </div>
+          )}
+
           <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-left">
             <p className="text-xs font-semibold text-indigo-400 mb-2">Δικαίωμα διαγραφής (GDPR)</p>
             <p className="text-xs text-gray-400 mb-3">

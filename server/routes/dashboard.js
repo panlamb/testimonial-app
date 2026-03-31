@@ -11,7 +11,7 @@ router.use(authMiddleware);
 
 router.get('/me', (req, res) => {
   const business = db.prepare(
-    'SELECT id, name, email, slug, plan, brand_name, brand_logo_url, widget_settings, created_at FROM businesses WHERE id = ?'
+    'SELECT id, name, email, slug, plan, brand_name, brand_logo_url, widget_settings, google_review_url, created_at FROM businesses WHERE id = ?'
   ).get(req.businessId);
   if (!business) return res.status(404).json({ error: 'Not found' });
   business.widget_settings = business.widget_settings ? JSON.parse(business.widget_settings) : null;
@@ -30,10 +30,10 @@ router.put('/widget-settings', (req, res) => {
 });
 
 router.put('/branding', (req, res) => {
-  const { brand_name, brand_logo_url } = req.body || {};
+  const { brand_name, brand_logo_url, google_review_url } = req.body || {};
   db.prepare(
-    'UPDATE businesses SET brand_name = ?, brand_logo_url = ? WHERE id = ?'
-  ).run(brand_name?.trim() || null, brand_logo_url?.trim() || null, req.businessId);
+    'UPDATE businesses SET brand_name = ?, brand_logo_url = ?, google_review_url = ? WHERE id = ?'
+  ).run(brand_name?.trim() || null, brand_logo_url?.trim() || null, google_review_url?.trim() || null, req.businessId);
   res.json({ success: true });
 });
 

@@ -12,7 +12,7 @@ export default function Dashboard() {
   const [filter, setFilter] = useState('all')
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState('')
-  const [branding, setBranding] = useState({ brand_name: '', brand_logo_url: '' })
+  const [branding, setBranding] = useState({ brand_name: '', brand_logo_url: '', google_review_url: '' })
   const [brandingSaved, setBrandingSaved] = useState(false)
   const [analytics, setAnalytics] = useState(null)
   const [aiSummary, setAiSummary] = useState('')
@@ -32,7 +32,7 @@ export default function Dashboard() {
       const [biz, tests, analyticsData] = await Promise.all([api.dashboard.me(), api.dashboard.testimonials(), api.dashboard.analytics()])
       setBusiness(biz)
       setAnalytics(analyticsData)
-      setBranding({ brand_name: biz.brand_name || '', brand_logo_url: biz.brand_logo_url || '' })
+      setBranding({ brand_name: biz.brand_name || '', brand_logo_url: biz.brand_logo_url || '', google_review_url: biz.google_review_url || '' })
       if (biz.widget_settings) {
         setWidgetSettings((prev) => ({ ...prev, ...biz.widget_settings }))
       }
@@ -265,24 +265,36 @@ export default function Dashboard() {
             <p className="text-sm text-gray-500 mb-4">
               Replace "Fimi" with your own brand on your customers' pages.
             </p>
-            <form onSubmit={handleBrandingSave} className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="text"
-                placeholder="Brand name (e.g. Acme Agency)"
-                value={branding.brand_name}
-                onChange={(e) => setBranding({ ...branding, brand_name: e.target.value })}
-                className="input flex-1"
-              />
-              <input
-                type="url"
-                placeholder="Logo URL (optional)"
-                value={branding.brand_logo_url}
-                onChange={(e) => setBranding({ ...branding, brand_logo_url: e.target.value })}
-                className="input flex-1"
-              />
-              <button type="submit" className="btn-primary shrink-0">
-                {brandingSaved ? 'Saved!' : 'Save'}
-              </button>
+            <form onSubmit={handleBrandingSave} className="flex flex-col gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="text"
+                  placeholder="Brand name (e.g. Acme Agency)"
+                  value={branding.brand_name}
+                  onChange={(e) => setBranding({ ...branding, brand_name: e.target.value })}
+                  className="input flex-1"
+                />
+                <input
+                  type="url"
+                  placeholder="Logo URL (optional)"
+                  value={branding.brand_logo_url}
+                  onChange={(e) => setBranding({ ...branding, brand_logo_url: e.target.value })}
+                  className="input flex-1"
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="url"
+                  placeholder="Google Review URL (optional) — e.g. https://g.page/r/..."
+                  value={branding.google_review_url}
+                  onChange={(e) => setBranding({ ...branding, google_review_url: e.target.value })}
+                  className="input flex-1"
+                />
+                <button type="submit" className="btn-primary shrink-0">
+                  {brandingSaved ? 'Saved!' : 'Save'}
+                </button>
+              </div>
+              <p className="text-xs text-gray-400">Google Review URL: happy customers (3+ stars) will be prompted to also leave a Google review after submitting.</p>
             </form>
           </div>
         </section>

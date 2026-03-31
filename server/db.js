@@ -60,6 +60,7 @@ for (const col of [
   'ALTER TABLE businesses ADD COLUMN trial_ends_at DATETIME',
   'ALTER TABLE businesses ADD COLUMN trial_notified INTEGER DEFAULT 0',
   'ALTER TABLE testimonials ADD COLUMN verified INTEGER DEFAULT 0',
+  'ALTER TABLE businesses ADD COLUMN google_review_url TEXT',
 ]) {
   try { db.exec(col) } catch {}
 }

@@ -31,6 +31,32 @@ async function sendNotification({ to, businessName, customerName, rating, review
   }).catch((err) => console.error('Email error:', err));
 }
 
+async function sendPrivateFeedback({ to, businessName, customerName, customerEmail, rating, reviewText }) {
+  if (!resend) return;
+  const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+  await resend.emails.send({
+    from: 'Fimi <onboarding@resend.dev>',
+    to,
+    subject: `⚠️ Private feedback for ${businessName} — ${rating}/5 stars`,
+    html: `
+      <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;background:#fef2f2;border-radius:12px;border:1px solid #fecaca">
+        <h2 style="margin:0 0 8px;color:#991b1b">Private Feedback Received</h2>
+        <p style="color:#6b7280;margin:0 0 16px">This review was <strong>not published</strong>. The customer had a negative experience — reach out to resolve it.</p>
+        <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:20px;margin-bottom:24px">
+          <p style="font-size:20px;margin:0 0 8px">${stars}</p>
+          <p style="color:#374151;margin:0 0 12px;font-style:italic">"${reviewText}"</p>
+          <p style="margin:0;font-size:14px;color:#374151"><strong>Name:</strong> ${customerName}</p>
+          ${customerEmail ? `<p style="margin:4px 0 0;font-size:14px;color:#374151"><strong>Email:</strong> <a href="mailto:${customerEmail}">${customerEmail}</a></p>` : ''}
+        </div>
+        <a href="https://testimonial-app-production.up.railway.app/dashboard" style="background:#dc2626;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;display:inline-block">
+          View in Dashboard →
+        </a>
+        <p style="color:#9ca3af;font-size:12px;margin-top:24px">Fimi automatically kept this review private to protect your reputation.</p>
+      </div>
+    `,
+  }).catch((err) => console.error('Private feedback email error:', err));
+}
+
 const router = express.Router();
 
 // Cloudinary is configured via env vars:
@@ -78,7 +104,7 @@ async function saveFile(file) {
 
 router.get('/:slug', (req, res) => {
   const business = db.prepare(
-    'SELECT id, name, slug, brand_name, brand_logo_url FROM businesses WHERE slug = ?'
+    'SELECT id, name, slug, brand_name, brand_logo_url, google_review_url FROM businesses WHERE slug = ?'
   ).get(req.params.slug);
   if (!business) return res.status(404).json({ error: 'Page not found' });
   db.prepare('INSERT INTO page_views (business_id, page_type) VALUES (?, ?)').run(business.id, 'collect');
@@ -108,10 +134,13 @@ router.post('/:slug', upload.single('screenshot'), async (req, res) => {
     const deleteToken = crypto.randomBytes(32).toString('hex');
 
     const isVerified = verified === '1' ? 1 : 0;
+    const isNegative = ratingNum <= 2;
+    const initialStatus = isNegative ? 'hidden' : 'pending';
+
     db.prepare(
       `INSERT INTO testimonials
-         (business_id, customer_name, customer_email, review_text, rating, screenshot_url, consent_given_at, delete_token, verified)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+         (business_id, customer_name, customer_email, review_text, rating, screenshot_url, consent_given_at, delete_token, verified, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).run(
       business.id,
       customer_name.trim(),
@@ -121,19 +150,32 @@ router.post('/:slug', upload.single('screenshot'), async (req, res) => {
       screenshotUrl,
       new Date().toISOString(),
       deleteToken,
-      isVerified
+      isVerified,
+      initialStatus
     );
 
     const owner = db.prepare('SELECT email, name FROM businesses WHERE id = ?').get(business.id);
-    sendNotification({
-      to: owner.email,
-      businessName: owner.name,
-      customerName: customer_name.trim(),
-      rating: ratingNum,
-      reviewText: review_text.trim(),
-    });
 
-    res.json({ success: true, deleteToken });
+    if (isNegative) {
+      sendPrivateFeedback({
+        to: owner.email,
+        businessName: owner.name,
+        customerName: customer_name.trim(),
+        customerEmail: customer_email?.trim() || null,
+        rating: ratingNum,
+        reviewText: review_text.trim(),
+      });
+    } else {
+      sendNotification({
+        to: owner.email,
+        businessName: owner.name,
+        customerName: customer_name.trim(),
+        rating: ratingNum,
+        reviewText: review_text.trim(),
+      });
+    }
+
+    res.json({ success: true, deleteToken, isNegative });
   } catch (err) {
     console.error('Upload error:', err);
     res.status(500).json({ error: 'Failed to save submission' });
