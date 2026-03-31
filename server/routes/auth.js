@@ -51,11 +51,12 @@ router.post('/register', (req, res) => {
 
   const passwordHash = bcrypt.hashSync(password, 10);
   const slug = generateSlug(name);
+  const trialEndsAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
 
   try {
     const result = db.prepare(
-      'INSERT INTO businesses (name, email, password_hash, slug) VALUES (?, ?, ?, ?)'
-    ).run(name, email, passwordHash, slug);
+      'INSERT INTO businesses (name, email, password_hash, slug, trial_ends_at) VALUES (?, ?, ?, ?, ?)'
+    ).run(name, email, passwordHash, slug, trialEndsAt);
 
     const business = db.prepare(
       'SELECT id, name, email, slug, plan, created_at FROM businesses WHERE id = ?'
