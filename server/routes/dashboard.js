@@ -223,6 +223,10 @@ router.post('/request-review', async (req, res) => {
             You received this email because you interacted with ${brandName}.<br/>
             If you don't want to leave a review, simply ignore this email.
           </p>
+          ${!business.brand_name ? `
+          <p style="color:#d1d5db;font-size:11px;margin-top:16px;padding-top:16px;border-top:1px solid #e5e7eb">
+            Sent via <a href="https://testimonial-app-production.up.railway.app?ref=email-footer" style="color:#a5b4fc;text-decoration:none">Fimi</a> — collect customer reviews for your business
+          </p>` : ''}
         </div>
       `,
     });
