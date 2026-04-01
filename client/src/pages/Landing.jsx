@@ -162,7 +162,7 @@ export default function Landing() {
       </nav>
 
       {/* Hero */}
-      <section className="relative overflow-hidden min-h-[88vh] flex items-center">
+      <section className="relative overflow-hidden min-h-[88vh] flex items-start">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
