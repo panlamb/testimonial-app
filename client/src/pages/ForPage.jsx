@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
+import { useCanonical } from '../hooks/useCanonical'
 
 const APP_URL = 'https://get-fimi.com'
 
@@ -339,6 +340,7 @@ const X_ICON = () => (
 
 export default function ForPage() {
   const { industry } = useParams()
+  useCanonical(`/for/${industry}`)
   const data = INDUSTRIES[industry]
 
   if (!data) {

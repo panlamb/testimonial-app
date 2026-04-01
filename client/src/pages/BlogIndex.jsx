@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
 import { POSTS } from './BlogPost'
+import { useCanonical } from '../hooks/useCanonical'
 
 export default function BlogIndex() {
+  useCanonical('/blog')
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       <nav className="border-b border-gray-800 px-6 py-4 flex items-center justify-between max-w-5xl mx-auto">

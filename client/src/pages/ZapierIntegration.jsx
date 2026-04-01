@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useCanonical } from '../hooks/useCanonical'
 
 const TRIGGERS = [
   { name: 'New testimonial approved', desc: 'Fires when you approve a testimonial in your dashboard.' },
@@ -14,6 +15,7 @@ const EXAMPLE_ZAPS = [
 ]
 
 export default function ZapierIntegration() {
+  useCanonical('/integrations/zapier')
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       <nav className="border-b border-gray-800 px-6 py-4 flex items-center justify-between max-w-5xl mx-auto">

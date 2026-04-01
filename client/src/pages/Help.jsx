@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useCanonical } from '../hooks/useCanonical'
 
 const SECTIONS = [
   {
@@ -190,6 +191,7 @@ function AccordionItem({ q, a }) {
 }
 
 export default function Help() {
+  useCanonical('/help')
   const [activeSection, setActiveSection] = useState('getting-started')
 
   return (

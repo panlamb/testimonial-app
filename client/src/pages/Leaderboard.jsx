@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useCanonical } from '../hooks/useCanonical'
 
 function Stars({ rating }) {
   return (
@@ -10,6 +11,7 @@ function Stars({ rating }) {
 }
 
 export default function Leaderboard() {
+  useCanonical('/leaderboard')
   const [businesses, setBusinesses] = useState([])
   const [loading, setLoading] = useState(true)
 

@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useCanonical } from '../hooks/useCanonical'
 
 export default function Contact() {
+  useCanonical('/contact')
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [status, setStatus] = useState('') // '' | 'sending' | 'sent' | 'error'
 

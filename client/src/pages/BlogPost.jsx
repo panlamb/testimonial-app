@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
+import { useCanonical } from '../hooks/useCanonical'
 
 export const POSTS = [
   {
@@ -534,6 +535,7 @@ function renderContent(markdown) {
 
 export default function BlogPost() {
   const { slug } = useParams()
+  useCanonical(`/blog/${slug}`)
   const post = POSTS.find((p) => p.slug === slug)
 
   if (!post) {

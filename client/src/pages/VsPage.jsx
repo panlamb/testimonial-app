@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
+import { useCanonical } from '../hooks/useCanonical'
 
 const COMPETITORS = {
   senja: {
@@ -97,6 +98,7 @@ const X_ICON = () => (
 
 export default function VsPage() {
   const { competitor } = useParams()
+  useCanonical(`/vs/${competitor}`)
   const data = COMPETITORS[competitor]
 
   if (!data) {

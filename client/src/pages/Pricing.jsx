@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useCanonical } from '../hooks/useCanonical'
 
 const MONTHLY = {
   pro: 9,
@@ -94,6 +95,7 @@ const plans = (billing) => [
 ]
 
 export default function Pricing() {
+  useCanonical('/pricing')
   const [billing, setBilling] = useState('monthly')
   const currentPlans = plans(billing)
 
