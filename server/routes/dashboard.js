@@ -11,10 +11,13 @@ router.use(authMiddleware);
 
 router.get('/me', (req, res) => {
   const business = db.prepare(
-    'SELECT id, name, email, slug, plan, brand_name, brand_logo_url, widget_settings, google_review_url, created_at FROM businesses WHERE id = ?'
+    'SELECT id, name, email, slug, plan, brand_name, brand_logo_url, widget_settings, google_review_url, referral_code, created_at FROM businesses WHERE id = ?'
   ).get(req.businessId);
   if (!business) return res.status(404).json({ error: 'Not found' });
   business.widget_settings = business.widget_settings ? JSON.parse(business.widget_settings) : null;
+  business.referral_count = db.prepare(
+    'SELECT COUNT(*) as count FROM businesses WHERE referred_by = ?'
+  ).get(req.businessId).count;
   res.json(business);
 });
 

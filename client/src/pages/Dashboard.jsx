@@ -137,6 +137,7 @@ export default function Dashboard() {
 
   const origin = window.location.origin
   const collectUrl = `${origin}/collect/${business.slug}`
+  const referralUrl = business.referral_code ? `${origin}/register?ref=${business.referral_code}` : null
   const wallUrl = `${origin}/wall/${business.slug}`
   const widgetScript = `<script src="${origin}/widget/${business.slug}.js"></script>`
 
@@ -293,6 +294,44 @@ export default function Dashboard() {
             </div>
           </div>
         </section>
+
+        {/* Referral Program */}
+        {referralUrl && (
+          <section>
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              Refer a Friend — Get 1 Month Free
+            </h2>
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <p className="text-sm text-gray-500 mb-4">
+                Share your referral link. Every person who signs up with it adds <strong>30 free days</strong> to your account — automatically, no limit.
+                {business.referral_count > 0 && (
+                  <span className="ml-2 text-indigo-600 font-medium">
+                    You've referred {business.referral_count} {business.referral_count === 1 ? 'person' : 'people'} so far.
+                  </span>
+                )}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+                <div className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 font-mono truncate">
+                  {referralUrl}
+                </div>
+                <button
+                  onClick={() => copy(referralUrl, 'referral')}
+                  className="btn-primary shrink-0"
+                >
+                  {copied === 'referral' ? 'Copied!' : 'Copy Link'}
+                </button>
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I've been using Fimi to collect customer reviews — it's really good and free to start.\n\nTry it here: ${referralUrl}`)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="shrink-0 text-sm bg-black text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-800 transition text-center"
+                >
+                  Share on X
+                </a>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* White Label Branding */}
         <section>

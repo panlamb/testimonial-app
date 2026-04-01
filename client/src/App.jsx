@@ -15,6 +15,7 @@ import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import TermsOfService from './pages/TermsOfService'
 import NotFound from './pages/NotFound'
+import VsPage from './pages/VsPage'
 import CookieConsent from './components/CookieConsent'
 
 function PrivateRoute({ children }) {
@@ -45,6 +46,7 @@ export default function App() {
         <Route path="/delete/:token" element={<DeleteTestimonial />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+        <Route path="/vs/:competitor" element={<VsPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

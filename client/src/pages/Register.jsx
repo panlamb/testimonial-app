@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { api } from '../api'
 
 export default function Register() {
@@ -7,13 +7,15 @@ export default function Register() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const referralCode = searchParams.get('ref')
 
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
     setLoading(true)
     try {
-      const { token, business } = await api.auth.register(form)
+      const { token, business } = await api.auth.register({ ...form, referralCode })
       localStorage.setItem('token', token)
       localStorage.setItem('business', JSON.stringify(business))
       navigate('/dashboard')
@@ -31,6 +33,12 @@ export default function Register() {
           <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
           <p className="text-gray-500 mt-1">Start collecting testimonials today</p>
         </div>
+
+        {referralCode && (
+          <div className="bg-indigo-50 border border-indigo-200 text-indigo-700 px-4 py-3 rounded-lg mb-4 text-sm font-medium">
+            You were invited by a friend — your 30-day free trial is ready.
+          </div>
+        )}
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">

@@ -1,9 +1,14 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const { Resend } = require('resend');
 const db = require('../db');
 const { JWT_SECRET } = require('../middleware/auth');
+
+function generateReferralCode() {
+  return crypto.randomBytes(4).toString('hex').toUpperCase(); // e.g. "A3F9B2C1"
+}
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
@@ -41,7 +46,7 @@ function generateSlug(name) {
 }
 
 router.post('/register', (req, res) => {
-  const { name, email, password } = req.body || {};
+  const { name, email, password, referralCode } = req.body || {};
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'All fields are required' });
   }
@@ -52,11 +57,25 @@ router.post('/register', (req, res) => {
   const passwordHash = bcrypt.hashSync(password, 10);
   const slug = generateSlug(name);
   const trialEndsAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  const myReferralCode = generateReferralCode();
+
+  // Resolve referrer
+  let referrerId = null;
+  if (referralCode) {
+    const referrer = db.prepare('SELECT id, trial_ends_at FROM businesses WHERE referral_code = ?').get(referralCode);
+    if (referrer) {
+      referrerId = referrer.id;
+      // Extend referrer's trial by 30 days from today or from their current end (whichever is later)
+      const base = referrer.trial_ends_at ? Math.max(Date.now(), new Date(referrer.trial_ends_at).getTime()) : Date.now();
+      const newTrialEnd = new Date(base + 30 * 24 * 60 * 60 * 1000).toISOString();
+      db.prepare('UPDATE businesses SET trial_ends_at = ? WHERE id = ?').run(newTrialEnd, referrer.id);
+    }
+  }
 
   try {
     const result = db.prepare(
-      'INSERT INTO businesses (name, email, password_hash, slug, trial_ends_at) VALUES (?, ?, ?, ?, ?)'
-    ).run(name, email, passwordHash, slug, trialEndsAt);
+      'INSERT INTO businesses (name, email, password_hash, slug, trial_ends_at, referral_code, referred_by) VALUES (?, ?, ?, ?, ?, ?, ?)'
+    ).run(name, email, passwordHash, slug, trialEndsAt, myReferralCode, referrerId);
 
     const business = db.prepare(
       'SELECT id, name, email, slug, plan, created_at FROM businesses WHERE id = ?'

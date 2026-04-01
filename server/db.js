@@ -61,6 +61,8 @@ for (const col of [
   'ALTER TABLE businesses ADD COLUMN trial_notified INTEGER DEFAULT 0',
   'ALTER TABLE testimonials ADD COLUMN verified INTEGER DEFAULT 0',
   'ALTER TABLE businesses ADD COLUMN google_review_url TEXT',
+  'ALTER TABLE businesses ADD COLUMN referral_code TEXT UNIQUE',
+  'ALTER TABLE businesses ADD COLUMN referred_by INTEGER',
 ]) {
   try { db.exec(col) } catch {}
 }
