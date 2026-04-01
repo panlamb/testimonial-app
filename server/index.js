@@ -107,7 +107,7 @@ cron.schedule('0 9 * * *', async () => {
   }).join('');
 
   await resend.emails.send({
-    from: 'Fimi <onboarding@resend.dev>',
+    from: 'Fimi <hello@get-fimi.com>',
     to: 'panos.lambrakis@gmail.com',
     subject: `${expiring.length} trial(s) expiring in 10 days`,
     html: `
@@ -174,7 +174,7 @@ cron.schedule('0 9 * * 1', async () => {
     const appUrl = process.env.APP_URL || 'https://get-fimi.com';
 
     await resend.emails.send({
-      from: 'Fimi <onboarding@resend.dev>',
+      from: 'Fimi <hello@get-fimi.com>',
       to: biz.email,
       subject: `Your Fimi week${newTestimonials > 0 ? ` — ${newTestimonials} new review${newTestimonials !== 1 ? 's' : ''}` : ''}`,
       html: `

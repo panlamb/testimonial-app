@@ -11,7 +11,7 @@ async function sendNotification({ to, businessName, customerName, rating, review
   if (!resend) return;
   const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
   await resend.emails.send({
-    from: 'Fimi <onboarding@resend.dev>',
+    from: 'Fimi <hello@get-fimi.com>',
     to,
     subject: `Νέα κριτική για ${businessName}`,
     html: `
@@ -35,7 +35,7 @@ async function sendPrivateFeedback({ to, businessName, customerName, customerEma
   if (!resend) return;
   const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
   await resend.emails.send({
-    from: 'Fimi <onboarding@resend.dev>',
+    from: 'Fimi <hello@get-fimi.com>',
     to,
     subject: `⚠️ Private feedback for ${businessName} — ${rating}/5 stars`,
     html: `

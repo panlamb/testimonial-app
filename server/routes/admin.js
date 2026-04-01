@@ -92,7 +92,7 @@ router.post('/outreach/send', adminAuth, async (req, res) => {
 
     try {
       await resend.emails.send({
-        from: 'Panos from Fimi <onboarding@resend.dev>',
+        from: 'Panos from Fimi <hello@get-fimi.com>',
         to: email,
         subject,
         html: `

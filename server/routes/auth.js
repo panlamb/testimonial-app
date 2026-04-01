@@ -16,7 +16,7 @@ async function notifyNewSignup({ name, email, slug }) {
   if (!resend) return;
   const date = new Date().toLocaleString('el-GR', { timeZone: 'Europe/Athens' });
   await resend.emails.send({
-    from: 'Fimi <onboarding@resend.dev>',
+    from: 'Fimi <hello@get-fimi.com>',
     to: 'panos.lambrakis@gmail.com',
     subject: `Νέος χρήστης: ${name}`,
     html: `
@@ -109,7 +109,7 @@ router.post('/forgot-password', async (req, res) => {
   const resetUrl = `${process.env.APP_URL || 'https://get-fimi.com'}/reset-password?token=${token}`;
 
   await resend.emails.send({
-    from: 'Fimi <onboarding@resend.dev>',
+    from: 'Fimi <hello@get-fimi.com>',
     to: business.email,
     subject: 'Reset your Fimi password',
     html: `

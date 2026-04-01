@@ -99,7 +99,7 @@ router.put('/testimonials/:id/status', (req, res) => {
       const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(wallUrl)}`;
 
       resend.emails.send({
-        from: 'Fimi <onboarding@resend.dev>',
+        from: 'Fimi <hello@get-fimi.com>',
         to: business.email,
         subject: `🎉 You just hit ${approvedCount} reviews!`,
         html: `
@@ -242,7 +242,7 @@ router.post('/request-review', async (req, res) => {
 
   try {
     await resend.emails.send({
-      from: 'Fimi <onboarding@resend.dev>',
+      from: 'Fimi <hello@get-fimi.com>',
       to: customer_email,
       subject: `How was your experience with ${brandName}?`,
       html: `
