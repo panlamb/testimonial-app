@@ -22,6 +22,41 @@ app.use('/api/admin', require('./routes/admin').router);
 app.use('/api/tools', require('./routes/tools'));
 app.use('/api/leaderboard', require('./routes/leaderboard'));
 
+// Contact form — simple rate limit (5 per IP per hour, in-memory)
+const contactHits = new Map();
+app.post('/api/contact', async (req, res) => {
+  const ip = req.ip || req.headers['x-forwarded-for'] || 'unknown';
+  const now = Date.now();
+  const hits = (contactHits.get(ip) || []).filter((t) => now - t < 60 * 60 * 1000);
+  if (hits.length >= 5) return res.status(429).json({ error: 'Too many messages. Try again later.' });
+  contactHits.set(ip, [...hits, now]);
+
+  const { name, email, message } = req.body || {};
+  if (!name || !email || !message) return res.status(400).json({ error: 'Missing fields' });
+
+  const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+  if (!resend) return res.status(500).json({ error: 'Email not configured' });
+
+  await resend.emails.send({
+    from: 'Fimi <hello@get-fimi.com>',
+    to: 'panos.lambrakis@gmail.com',
+    replyTo: email,
+    subject: `[Fimi Contact] ${name}`,
+    html: `
+      <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:24px;background:#f9fafb;border-radius:12px">
+        <h2 style="margin:0 0 16px;color:#1e1b4b">New contact message</h2>
+        <p style="margin:0 0 6px;color:#374151"><strong>From:</strong> ${name} &lt;${email}&gt;</p>
+        <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0"/>
+        <p style="color:#374151;white-space:pre-wrap;line-height:1.7">${message}</p>
+        <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0"/>
+        <p style="color:#9ca3af;font-size:12px">Reply directly to this email to respond to ${name}.</p>
+      </div>
+    `,
+  }).catch((err) => console.error('Contact email error:', err));
+
+  res.json({ ok: true });
+});
+
 // Unsubscribe from outreach emails
 app.get('/unsubscribe/:token', (req, res) => {
   const row = db.prepare('SELECT id FROM outreach_emails WHERE unsubscribe_token = ?').get(req.params.token);

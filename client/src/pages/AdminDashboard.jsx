@@ -24,6 +24,9 @@ Worth a look: https://get-fimi.com
 — Panos`)
   const [outreachStatus, setOutreachStatus] = useState('')
   const [outreachResult, setOutreachResult] = useState(null)
+  const [quickEmail, setQuickEmail] = useState('')
+  const [quickName, setQuickName] = useState('')
+  const [quickStatus, setQuickStatus] = useState('')
   const fileRef = useRef(null)
   const navigate = useNavigate()
 
@@ -60,6 +63,35 @@ Worth a look: https://get-fimi.com
       setOutreachContacts(contacts)
     }
     reader.readAsText(file)
+  }
+
+  async function handleQuickSend() {
+    if (!quickEmail || !quickEmail.includes('@')) return
+    setQuickStatus('sending')
+    try {
+      const res = await fetch('/api/admin/outreach/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          contacts: [{ email: quickEmail.trim(), business_name: quickName.trim() || quickEmail.trim() }],
+          subject: outreachSubject,
+          body: outreachBody,
+        }),
+      })
+      const data = await res.json()
+      if (data.sent > 0) {
+        setQuickStatus('sent')
+        setQuickEmail('')
+        setQuickName('')
+        load()
+      } else {
+        setQuickStatus('skipped')
+      }
+    } catch {
+      setQuickStatus('error')
+    } finally {
+      setTimeout(() => setQuickStatus(''), 3000)
+    }
   }
 
   async function handleOutreachSend() {
@@ -228,9 +260,40 @@ Worth a look: https://get-fimi.com
             )}
           </div>
 
+          {/* Quick single send */}
+          <div className="bg-gray-700/40 border border-gray-600/50 rounded-xl p-4 space-y-3">
+            <p className="text-xs text-gray-300 font-medium">Quick send — single email</p>
+            <div className="flex gap-2">
+              <input
+                type="email"
+                value={quickEmail}
+                onChange={(e) => setQuickEmail(e.target.value)}
+                placeholder="email@example.com"
+                className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500"
+              />
+              <input
+                type="text"
+                value={quickName}
+                onChange={(e) => setQuickName(e.target.value)}
+                placeholder="Business name (optional)"
+                className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500"
+              />
+              <button
+                onClick={handleQuickSend}
+                disabled={!quickEmail || quickStatus === 'sending'}
+                className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white text-sm font-semibold px-4 py-2 rounded-lg transition whitespace-nowrap"
+              >
+                {quickStatus === 'sending' ? 'Sending…' : 'Send →'}
+              </button>
+            </div>
+            {quickStatus === 'sent' && <p className="text-xs text-green-400">✓ Sent</p>}
+            {quickStatus === 'skipped' && <p className="text-xs text-amber-400">Already contacted — skipped</p>}
+            {quickStatus === 'error' && <p className="text-xs text-red-400">Error sending</p>}
+          </div>
+
           <div>
             <p className="text-xs text-gray-400 mb-2">
-              Upload a CSV with columns: <code className="bg-gray-700 px-1 rounded">email, business_name</code>
+              Or upload a CSV with columns: <code className="bg-gray-700 px-1 rounded">email, business_name</code>
             </p>
             <input ref={fileRef} type="file" accept=".csv" onChange={handleCSV}
               className="text-sm text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-indigo-600/30 file:text-indigo-300 hover:file:bg-indigo-600/50 cursor-pointer" />
