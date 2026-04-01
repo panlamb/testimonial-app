@@ -113,7 +113,9 @@ export default function Pricing() {
             <img src="/logo.png" alt="Fimi" className="h-8 w-8 rounded-lg" />
             <span className="text-lg font-bold text-white">Fimi</span>
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
+            <Link to="/blog" className="text-sm text-gray-400 hover:text-white transition hidden sm:block">Blog</Link>
+            <Link to="/help" className="text-sm text-gray-400 hover:text-white transition hidden sm:block">Help</Link>
             <Link to="/login" className="text-sm text-gray-400 hover:text-white transition">Sign in</Link>
             <Link to="/register" className="text-sm bg-white text-gray-900 hover:bg-gray-100 px-4 py-2 rounded-lg transition font-semibold">
               Try free →
