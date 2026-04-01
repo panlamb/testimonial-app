@@ -63,6 +63,7 @@ for (const col of [
   'ALTER TABLE businesses ADD COLUMN google_review_url TEXT',
   'ALTER TABLE businesses ADD COLUMN referral_code TEXT UNIQUE',
   'ALTER TABLE businesses ADD COLUMN referred_by INTEGER',
+  'ALTER TABLE businesses ADD COLUMN webhook_url TEXT',
 ]) {
   try { db.exec(col) } catch {}
 }

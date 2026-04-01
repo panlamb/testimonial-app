@@ -6,6 +6,31 @@ import TestimonialCard from '../components/TestimonialCard'
 
 const FILTERS = ['all', 'pending', 'approved', 'rejected', 'hidden']
 
+function WebhookInput({ defaultUrl }) {
+  const [url, setUrl] = useState(defaultUrl || '')
+  const [saved, setSaved] = useState(false)
+  async function save(e) {
+    e.preventDefault()
+    await api.dashboard.updateWebhook({ webhook_url: url })
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+  }
+  return (
+    <form onSubmit={save} className="flex gap-2">
+      <input
+        type="url"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+        placeholder="https://hooks.zapier.com/hooks/catch/..."
+        className="input flex-1 text-sm"
+      />
+      <button type="submit" className="btn-primary shrink-0 text-sm">
+        {saved ? 'Saved!' : 'Save'}
+      </button>
+    </form>
+  )
+}
+
 function TrialBanner({ trialEndsAt }) {
   const [dismissed, setDismissed] = useState(() => localStorage.getItem('trial_banner_dismissed') === '1')
   if (!trialEndsAt || dismissed) return null
@@ -549,6 +574,25 @@ export default function Dashboard() {
                 {widgetSaved ? 'Saved!' : 'Save'}
               </button>
             </form>
+          </div>
+        </section>
+
+        {/* Integrations / Zapier */}
+        <section>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+            Integrations
+          </h2>
+          <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="font-medium text-gray-900 text-sm">Webhook (Zapier / Make / n8n)</p>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  Paste a webhook URL to receive a POST request every time a testimonial is approved.{' '}
+                  <a href="/integrations/zapier" target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline">How to set up →</a>
+                </p>
+              </div>
+            </div>
+            <WebhookInput defaultUrl={business.webhook_url} />
           </div>
         </section>
 

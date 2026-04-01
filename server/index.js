@@ -19,6 +19,8 @@ app.use('/api/wall', require('./routes/wall'));
 app.use('/widget', require('./routes/widget'));
 app.use('/badge', require('./routes/badge'));
 app.use('/api/admin', require('./routes/admin').router);
+app.use('/api/tools', require('./routes/tools'));
+app.use('/api/leaderboard', require('./routes/leaderboard'));
 
 // Unsubscribe from outreach emails
 app.get('/unsubscribe/:token', (req, res) => {
@@ -134,6 +136,87 @@ cron.schedule('0 9 * * *', async () => {
   db.prepare(`UPDATE businesses SET trial_notified = 1 WHERE id IN (${ids.map(() => '?').join(',')})`).run(...ids);
 
   console.log(`Trial expiry notification sent for ${expiring.length} user(s)`);
+});
+
+// Weekly digest — every Monday at 9:00
+cron.schedule('0 9 * * 1', async () => {
+  const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+  if (!resend) return;
+
+  const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  const businesses = db.prepare('SELECT id, name, email, slug FROM businesses').all();
+
+  for (const biz of businesses) {
+    const newTestimonials = db.prepare(
+      "SELECT COUNT(*) as count FROM testimonials WHERE business_id = ? AND created_at >= ?"
+    ).get(biz.id, since).count;
+
+    const newApproved = db.prepare(
+      "SELECT COUNT(*) as count FROM testimonials WHERE business_id = ? AND status = 'approved' AND created_at >= ?"
+    ).get(biz.id, since).count;
+
+    const privateComplaints = db.prepare(
+      "SELECT COUNT(*) as count FROM testimonials WHERE business_id = ? AND status = 'pending' AND rating <= 2 AND created_at >= ?"
+    ).get(biz.id, since).count;
+
+    const totalApproved = db.prepare(
+      "SELECT COUNT(*) as count FROM testimonials WHERE business_id = ? AND status = 'approved'"
+    ).get(biz.id).count;
+
+    const widgetViews = db.prepare(
+      "SELECT COUNT(*) as count FROM page_views WHERE business_id = ? AND page_type = 'widget' AND created_at >= ?"
+    ).get(biz.id, since).count;
+
+    // Only send if there was activity
+    if (newTestimonials === 0 && widgetViews === 0) continue;
+
+    const appUrl = process.env.APP_URL || 'https://testimonial-app-production.up.railway.app';
+
+    await resend.emails.send({
+      from: 'Fimi <onboarding@resend.dev>',
+      to: biz.email,
+      subject: `Your Fimi week${newTestimonials > 0 ? ` — ${newTestimonials} new review${newTestimonials !== 1 ? 's' : ''}` : ''}`,
+      html: `
+        <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;background:#f9fafb;border-radius:12px">
+          <h2 style="margin:0 0 4px;color:#1e1b4b">Your week on Fimi</h2>
+          <p style="color:#6b7280;margin:0 0 24px;font-size:14px">Here's what happened in the last 7 days for ${biz.name}</p>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px">
+            ${[
+              { label: 'New reviews', value: newTestimonials, color: '#4f46e5' },
+              { label: 'Newly approved', value: newApproved, color: '#059669' },
+              { label: 'Total approved', value: totalApproved, color: '#111827' },
+              { label: 'Private complaints', value: privateComplaints, color: privateComplaints > 0 ? '#dc2626' : '#6b7280' },
+            ].map(s => `
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:16px;text-align:center">
+                <div style="font-size:28px;font-weight:700;color:${s.color}">${s.value}</div>
+                <div style="font-size:12px;color:#6b7280;margin-top:4px">${s.label}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          ${privateComplaints > 0 ? `
+          <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:16px;margin-bottom:24px">
+            <p style="margin:0;color:#dc2626;font-size:14px;font-weight:600">
+              ⚠️ You have ${privateComplaints} private complaint${privateComplaints !== 1 ? 's' : ''} waiting for your response.
+            </p>
+          </div>` : ''}
+
+          <a href="${appUrl}/dashboard" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;font-size:14px">
+            Open Dashboard →
+          </a>
+
+          <p style="color:#9ca3af;font-size:11px;margin-top:24px">
+            You're receiving this because you have a Fimi account.
+            <a href="${appUrl}/dashboard" style="color:#9ca3af">Manage email preferences</a>
+          </p>
+        </div>
+      `,
+    }).catch((err) => console.error(`Weekly digest error for ${biz.email}:`, err));
+  }
+
+  console.log(`Weekly digest sent`);
 });
 
 app.listen(PORT, () => {

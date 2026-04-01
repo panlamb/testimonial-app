@@ -91,6 +91,28 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Tools & other pages -->
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/tools/review-response</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/leaderboard</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/partners</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/integrations/zapier</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Industry landing pages -->
   <url>
     <loc>https://testimonial-app-production.up.railway.app/for/restaurants</loc>

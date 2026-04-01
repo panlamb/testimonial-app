@@ -36,6 +36,7 @@ export const api = {
     analytics: () => request('/dashboard/analytics'),
     aiSummary: () => request('/dashboard/ai-summary', { method: 'POST' }),
     aiReply: (id) => request(`/dashboard/ai-reply/${id}`, { method: 'POST' }),
+    updateWebhook: (body) => request('/dashboard/webhook', { method: 'PUT', body: JSON.stringify(body) }),
   },
   collect: {
     getPage: (slug) => request(`/collect/${slug}`),

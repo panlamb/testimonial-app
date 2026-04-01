@@ -19,6 +19,10 @@ import VsPage from './pages/VsPage'
 import ForPage from './pages/ForPage'
 import BlogIndex from './pages/BlogIndex'
 import BlogPost from './pages/BlogPost'
+import ReviewResponseTool from './pages/ReviewResponseTool'
+import Leaderboard from './pages/Leaderboard'
+import Partners from './pages/Partners'
+import ZapierIntegration from './pages/ZapierIntegration'
 import CookieConsent from './components/CookieConsent'
 
 function PrivateRoute({ children }) {
@@ -53,6 +57,10 @@ export default function App() {
         <Route path="/for/:industry" element={<ForPage />} />
         <Route path="/blog" element={<BlogIndex />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/tools/review-response" element={<ReviewResponseTool />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/partners" element={<Partners />} />
+        <Route path="/integrations/zapier" element={<ZapierIntegration />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

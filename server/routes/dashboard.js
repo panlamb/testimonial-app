@@ -4,6 +4,19 @@ const Anthropic = require('@anthropic-ai/sdk');
 const db = require('../db');
 const { authMiddleware } = require('../middleware/auth');
 
+async function fireWebhook(webhookUrl, payload) {
+  try {
+    await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'User-Agent': 'Fimi-Webhook/1.0' },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(5000),
+    });
+  } catch (err) {
+    console.error('Webhook delivery failed:', err.message);
+  }
+}
+
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 const router = express.Router();
@@ -11,7 +24,7 @@ router.use(authMiddleware);
 
 router.get('/me', (req, res) => {
   const business = db.prepare(
-    'SELECT id, name, email, slug, plan, brand_name, brand_logo_url, widget_settings, google_review_url, referral_code, trial_ends_at, created_at FROM businesses WHERE id = ?'
+    'SELECT id, name, email, slug, plan, brand_name, brand_logo_url, widget_settings, google_review_url, referral_code, trial_ends_at, webhook_url, created_at FROM businesses WHERE id = ?'
   ).get(req.businessId);
   if (!business) return res.status(404).json({ error: 'Not found' });
   business.widget_settings = business.widget_settings ? JSON.parse(business.widget_settings) : null;
@@ -60,6 +73,15 @@ router.put('/testimonials/:id/status', (req, res) => {
   if (!t) return res.status(404).json({ error: 'Testimonial not found' });
 
   db.prepare('UPDATE testimonials SET status = ? WHERE id = ?').run(status, req.params.id);
+
+  // Fire webhook if configured
+  if (status === 'approved') {
+    const biz = db.prepare('SELECT webhook_url FROM businesses WHERE id = ?').get(req.businessId);
+    if (biz?.webhook_url) {
+      const full = db.prepare('SELECT * FROM testimonials WHERE id = ?').get(req.params.id);
+      fireWebhook(biz.webhook_url, { event: 'testimonial.approved', testimonial: full });
+    }
+  }
 
   if (status === 'approved' && resend) {
     const approvedCount = db.prepare(
@@ -250,6 +272,13 @@ router.post('/request-review', async (req, res) => {
     console.error('Review request email error:', err);
     res.status(500).json({ error: 'Failed to send email' });
   }
+});
+
+router.put('/webhook', (req, res) => {
+  const { webhook_url } = req.body || {};
+  db.prepare('UPDATE businesses SET webhook_url = ? WHERE id = ?')
+    .run(webhook_url?.trim() || null, req.businessId);
+  res.json({ success: true });
 });
 
 router.delete('/testimonials/:id', (req, res) => {
