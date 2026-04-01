@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useCanonical } from '../hooks/useCanonical'
+import { usePageMeta } from '../hooks/useCanonical'
 
 const BENEFITS = [
   { icon: '💰', title: '20% recurring commission', desc: 'Earn 20% of every payment made by clients you refer — for as long as they stay subscribed.' },
@@ -21,7 +21,11 @@ const WHO = [
 ]
 
 export default function Partners() {
-  useCanonical('/partners')
+  usePageMeta({
+    path: '/partners',
+    title: 'Partner Program — Fimi | Earn 20% Recurring Commission',
+    description: 'Refer businesses to Fimi and earn 20% of every payment they make — for life. Use your existing referral link. No caps, no minimums.',
+  })
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       <nav className="border-b border-gray-800 px-6 py-4 flex items-center justify-between max-w-5xl mx-auto">

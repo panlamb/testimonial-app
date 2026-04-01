@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom'
 import { POSTS } from './BlogPost'
-import { useCanonical } from '../hooks/useCanonical'
+import { usePageMeta } from '../hooks/useCanonical'
 
 export default function BlogIndex() {
-  useCanonical('/blog')
+  usePageMeta({
+    path: '/blog',
+    title: 'Blog — Fimi | Testimonial & Review Collection Tips',
+    description: 'Guides and tips on collecting customer testimonials, handling negative reviews, embedding social proof on your website, and growing your business with reviews.',
+  })
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       <nav className="border-b border-gray-800 px-6 py-4 flex items-center justify-between max-w-5xl mx-auto">

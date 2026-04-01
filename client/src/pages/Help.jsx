@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useCanonical } from '../hooks/useCanonical'
+import { usePageMeta } from '../hooks/useCanonical'
 
 const SECTIONS = [
   {
@@ -191,7 +191,11 @@ function AccordionItem({ q, a }) {
 }
 
 export default function Help() {
-  useCanonical('/help')
+  usePageMeta({
+    path: '/help',
+    title: 'Help & Documentation — Fimi',
+    description: 'Learn how to set up Fimi, collect testimonials, embed your widget, handle negative reviews, and more. Full documentation and step-by-step guides.',
+  })
   const [activeSection, setActiveSection] = useState('getting-started')
 
   return (

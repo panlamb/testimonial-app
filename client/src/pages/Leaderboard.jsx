@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useCanonical } from '../hooks/useCanonical'
+import { usePageMeta } from '../hooks/useCanonical'
 
 function Stars({ rating }) {
   return (
@@ -11,7 +11,11 @@ function Stars({ rating }) {
 }
 
 export default function Leaderboard() {
-  useCanonical('/leaderboard')
+  usePageMeta({
+    path: '/leaderboard',
+    title: 'Leaderboard — Fimi | Top Businesses by Customer Reviews',
+    description: 'See which businesses have collected the most verified customer testimonials on Fimi.',
+  })
   const [businesses, setBusinesses] = useState([])
   const [loading, setLoading] = useState(true)
 

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useCanonical } from '../hooks/useCanonical'
+import { usePageMeta } from '../hooks/useCanonical'
 
 const TRIGGERS = [
   { name: 'New testimonial approved', desc: 'Fires when you approve a testimonial in your dashboard.' },
@@ -15,7 +15,11 @@ const EXAMPLE_ZAPS = [
 ]
 
 export default function ZapierIntegration() {
-  useCanonical('/integrations/zapier')
+  usePageMeta({
+    path: '/integrations/zapier',
+    title: 'Zapier & Webhook Integration — Fimi | Connect to 5,000+ Apps',
+    description: 'Connect Fimi to Zapier, Make, n8n or any tool via webhook. Fire automations every time a testimonial is approved. No code needed.',
+  })
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       <nav className="border-b border-gray-800 px-6 py-4 flex items-center justify-between max-w-5xl mx-auto">

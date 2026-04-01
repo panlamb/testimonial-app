@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { useCanonical } from '../hooks/useCanonical'
+import { usePageMeta } from '../hooks/useCanonical'
 
 export const POSTS = [
   {
@@ -535,8 +535,12 @@ function renderContent(markdown) {
 
 export default function BlogPost() {
   const { slug } = useParams()
-  useCanonical(`/blog/${slug}`)
   const post = POSTS.find((p) => p.slug === slug)
+  usePageMeta({
+    path: `/blog/${slug}`,
+    title: post ? `${post.title} — Fimi Blog` : 'Blog — Fimi',
+    description: post ? post.excerpt : undefined,
+  })
 
   if (!post) {
     return (

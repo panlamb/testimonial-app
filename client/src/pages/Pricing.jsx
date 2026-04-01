@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useCanonical } from '../hooks/useCanonical'
+import { usePageMeta } from '../hooks/useCanonical'
 
 const MONTHLY = {
   pro: 9,
@@ -95,7 +95,11 @@ const plans = (billing) => [
 ]
 
 export default function Pricing() {
-  useCanonical('/pricing')
+  usePageMeta({
+    path: '/pricing',
+    title: 'Pricing — Fimi | Free & Pro Plans from €7/month',
+    description: 'Fimi is free to start. Pro from €7/month (billed annually) or €9/month. Unlimited reviews, embed widget, AI features, negative review handling. 30-day free trial, no credit card.',
+  })
   const [billing, setBilling] = useState('monthly')
   const currentPlans = plans(billing)
 

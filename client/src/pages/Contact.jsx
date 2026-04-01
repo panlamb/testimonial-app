@@ -1,9 +1,13 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useCanonical } from '../hooks/useCanonical'
+import { usePageMeta } from '../hooks/useCanonical'
 
 export default function Contact() {
-  useCanonical('/contact')
+  usePageMeta({
+    path: '/contact',
+    title: 'Contact — Fimi | Get in Touch',
+    description: 'Have a question or feedback? Send us a message and we\'ll get back to you within 24 hours.',
+  })
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [status, setStatus] = useState('') // '' | 'sending' | 'sent' | 'error'
 

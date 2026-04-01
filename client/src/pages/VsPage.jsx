@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { useCanonical } from '../hooks/useCanonical'
+import { usePageMeta } from '../hooks/useCanonical'
 
 const COMPETITORS = {
   senja: {
@@ -98,8 +98,12 @@ const X_ICON = () => (
 
 export default function VsPage() {
   const { competitor } = useParams()
-  useCanonical(`/vs/${competitor}`)
   const data = COMPETITORS[competitor]
+  usePageMeta({
+    path: `/vs/${competitor}`,
+    title: data ? `Fimi vs ${data.name} — Which is better for small businesses?` : 'Fimi vs Competitors',
+    description: data ? `Compare Fimi and ${data.name} side by side. Features, pricing, and key differences — so you can choose the right testimonial tool for your business.` : undefined,
+  })
 
   if (!data) {
     return (
