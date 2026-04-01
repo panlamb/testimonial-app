@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 
 function FaqItem({ q, a, defaultOpen = false }) {
@@ -127,9 +127,53 @@ function ProductMockup() {
   )
 }
 
+const FAQ_ITEMS = [
+  {
+    q: 'Do I need technical skills to set up Fimi?',
+    a: 'No. Your collection page and Wall of Love are ready the moment you register. Embedding the widget requires pasting one line of code — that\'s the most technical it gets.',
+  },
+  {
+    q: 'What happens if a customer leaves a 1 or 2 star review?',
+    a: 'It never goes public. You receive a private email with the customer\'s contact details so you can reach out and fix the issue. You can also generate an AI-written reply directly from your dashboard.',
+  },
+  {
+    q: 'How does the 30-day free trial work?',
+    a: 'Sign up and get full Pro access for 30 days — no credit card required. At the end of the trial, upgrade to keep your features, or stay on the free plan.',
+  },
+  {
+    q: 'Can I use my own brand instead of "Fimi"?',
+    a: 'Yes, on any paid plan. Go to Dashboard → White Label Branding, enter your brand name and logo URL. The "Powered by Fimi" badge disappears everywhere customer-facing.',
+  },
+  {
+    q: 'How does the Google Review redirect work?',
+    a: 'Paste your Google Review link in the dashboard. After a happy customer (3+ stars) submits their testimonial, they\'re prompted to also leave a Google Review with one tap. Two reviews, one action.',
+  },
+  {
+    q: 'Is my customers\' data GDPR compliant?',
+    a: 'Yes. Every submission requires explicit consent. Customers receive a unique deletion link so they can remove their data at any time.',
+  },
+]
+
 export default function Landing() {
   const [searchParams] = useSearchParams()
   const isFromPH = searchParams.get('ref') === 'producthunt'
+
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.type = 'application/ld+json'
+    script.id = 'faq-schema'
+    script.text = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: FAQ_ITEMS.map(({ q, a }) => ({
+        '@type': 'Question',
+        name: q,
+        acceptedAnswer: { '@type': 'Answer', text: a },
+      })),
+    })
+    document.head.appendChild(script)
+    return () => document.getElementById('faq-schema')?.remove()
+  }, [])
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white">
@@ -322,32 +366,7 @@ export default function Landing() {
             <h2 className="text-3xl font-bold text-white">Common questions</h2>
           </div>
           <div>
-            {[
-              {
-                q: 'Do I need technical skills to set up Fimi?',
-                a: 'No. Your collection page and Wall of Love are ready the moment you register. Embedding the widget requires pasting one line of code — that\'s the most technical it gets.',
-              },
-              {
-                q: 'What happens if a customer leaves a 1 or 2 star review?',
-                a: 'It never goes public. You receive a private email with the customer\'s contact details so you can reach out and fix the issue. You can also generate an AI-written reply directly from your dashboard.',
-              },
-              {
-                q: 'How does the 30-day free trial work?',
-                a: 'Sign up and get full Pro access for 30 days — no credit card required. At the end of the trial, upgrade to keep your features, or stay on the free plan.',
-              },
-              {
-                q: 'Can I use my own brand instead of "Fimi"?',
-                a: 'Yes, on any paid plan. Go to Dashboard → White Label Branding, enter your brand name and logo URL. The "Powered by Fimi" badge disappears everywhere customer-facing.',
-              },
-              {
-                q: 'How does the Google Review redirect work?',
-                a: 'Paste your Google Review link in the dashboard. After a happy customer (3+ stars) submits their testimonial, they\'re prompted to also leave a Google Review with one tap. Two reviews, one action.',
-              },
-              {
-                q: 'Is my customers\' data GDPR compliant?',
-                a: 'Yes. Every submission requires explicit consent. Customers receive a unique deletion link so they can remove their data at any time.',
-              },
-            ].map((item, i) => (
+            {FAQ_ITEMS.map((item, i) => (
               <FaqItem key={item.q} {...item} defaultOpen={i === 0} />
             ))}
           </div>
