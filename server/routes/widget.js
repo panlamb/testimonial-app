@@ -61,7 +61,8 @@ router.get('/:slug.js', (req, res) => {
     '.tw-name{font-weight:600;color:' + c.nameColor + ';font-size:14px}',
     '.tw-img{width:100%;border-radius:8px;margin-bottom:12px;max-height:200px;object-fit:cover}',
     '.tw-badge{text-align:center;margin-top:16px;font-size:11px;color:#9ca3af}',
-    '.tw-badge a{color:#6b7280;text-decoration:none}',
+    '.tw-badge a{color:#6b7280;text-decoration:none;transition:color .15s}',
+    '.tw-badge a:hover{color:#4f46e5}',
     '.tw-empty{text-align:center;color:#9ca3af;padding:40px 20px}',
   ].join('');
   document.head.appendChild(style);
@@ -98,7 +99,7 @@ router.get('/:slug.js', (req, res) => {
     html += '</div>';
   }
   if (_tw.showBadge) {
-    html += '<div class="tw-badge">Powered by <a href="#" target="_blank">TestimonialApp</a></div>';
+    html += '<div class="tw-badge">Powered by <a href="${origin}?ref=widget" target="_blank">Fimi</a></div>';
   }
   html += '</div>';
   target.innerHTML = html;

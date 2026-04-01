@@ -204,6 +204,16 @@ export default function Dashboard() {
               href={wallUrl}
               onCopy={() => copy(wallUrl, 'wall')}
               copied={copied === 'wall'}
+              shareButtons={[
+                {
+                  label: 'Share on LinkedIn',
+                  href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(wallUrl)}`,
+                },
+                {
+                  label: 'Share on X',
+                  href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out our customer reviews ⭐\n${wallUrl}`)}`,
+                },
+              ]}
             />
             <ShareCard
               title="Embed Widget"
@@ -506,7 +516,7 @@ export default function Dashboard() {
   )
 }
 
-function ShareCard({ title, subtitle, value, href, onCopy, copied, isCode }) {
+function ShareCard({ title, subtitle, value, href, onCopy, copied, isCode, shareButtons }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4 flex flex-col gap-3">
       <div className="flex items-start justify-between">
@@ -536,6 +546,21 @@ function ShareCard({ title, subtitle, value, href, onCopy, copied, isCode }) {
           {copied ? 'Copied!' : 'Copy'}
         </button>
       </div>
+      {shareButtons && (
+        <div className="flex gap-2 flex-wrap">
+          {shareButtons.map((btn) => (
+            <a
+              key={btn.label}
+              href={btn.href}
+              target="_blank"
+              rel="noreferrer"
+              className="text-xs px-3 py-1.5 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 transition"
+            >
+              {btn.label}
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

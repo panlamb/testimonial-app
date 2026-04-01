@@ -251,9 +251,9 @@ export default function CollectPage() {
         {!business.brand_name && (
           <p className="text-center text-xs text-gray-600 mt-6">
             Powered by{' '}
-            <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent font-semibold">
+            <a href="/?ref=collect" className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent font-semibold hover:opacity-80 transition">
               Fimi
-            </span>
+            </a>
           </p>
         )}
       </div>

@@ -23,7 +23,43 @@ app.use('/api/admin', require('./routes/admin').router);
 // Serve built React app in production
 if (process.env.NODE_ENV === 'production') {
   const distPath = path.join(__dirname, '..', 'client', 'dist');
+  const fs = require('fs');
   app.use(express.static(distPath));
+
+  // Dynamic OG meta tags for wall pages
+  app.get('/wall/:slug', (req, res) => {
+    const business = db.prepare(
+      'SELECT name, brand_name, brand_logo_url, slug FROM businesses WHERE slug = ?'
+    ).get(req.params.slug);
+
+    if (!business) return res.sendFile(path.join(distPath, 'index.html'));
+
+    const displayName = business.brand_name || business.name;
+    const appUrl = process.env.APP_URL || 'https://testimonial-app-production.up.railway.app';
+    const wallUrl = `${appUrl}/wall/${business.slug}`;
+    const ogImage = business.brand_logo_url || `${appUrl}/OG.png`;
+
+    let html = fs.readFileSync(path.join(distPath, 'index.html'), 'utf-8');
+    html = html.replace(
+      '<title>Fimi — Collect Customer Reviews & Build Social Proof</title>',
+      `<title>${displayName} — Wall of Love</title>`
+    ).replace(
+      '<meta property="og:title" content="Fimi — Collect Customer Reviews & Build Social Proof" />',
+      `<meta property="og:title" content="${displayName} — Wall of Love" />`
+    ).replace(
+      '<meta property="og:description" content="Collect testimonials, display them on your website, and handle negative reviews privately — before any damage is done. Free plan available." />',
+      `<meta property="og:description" content="See what customers are saying about ${displayName}." />`
+    ).replace(
+      `<meta property="og:url" content="${appUrl}" />`,
+      `<meta property="og:url" content="${wallUrl}" />`
+    ).replace(
+      `<meta property="og:image" content="${appUrl}/OG.png" />`,
+      `<meta property="og:image" content="${ogImage}" />`
+    );
+
+    res.send(html);
+  });
+
   app.get('*', (req, res) => {
     res.sendFile(path.join(distPath, 'index.html'));
   });

@@ -109,13 +109,16 @@ export default function WallPage() {
           </div>
         )}
 
-        {business.plan === 'free' && !business.brand_name && (
-          <p className="text-center text-xs text-gray-600 mt-16">
-            Powered by{' '}
-            <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent font-semibold">
-              Fimi
-            </span>
-          </p>
+        {!business.brand_name && (
+          <div className="mt-20 text-center border-t border-white/5 pt-12">
+            <p className="text-gray-600 text-sm mb-3">Want your own Wall of Love?</p>
+            <a
+              href="/register?ref=wall"
+              className="inline-block bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold px-6 py-3 rounded-xl transition"
+            >
+              Create yours free with Fimi →
+            </a>
+          </div>
         )}
       </div>
     </div>
