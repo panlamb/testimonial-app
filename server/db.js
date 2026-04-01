@@ -64,6 +64,7 @@ for (const col of [
   'ALTER TABLE businesses ADD COLUMN referral_code TEXT UNIQUE',
   'ALTER TABLE businesses ADD COLUMN referred_by INTEGER',
   'ALTER TABLE businesses ADD COLUMN webhook_url TEXT',
+  'ALTER TABLE businesses ADD COLUMN trial_user_notified INTEGER DEFAULT 0',
 ]) {
   try { db.exec(col) } catch {}
 }
