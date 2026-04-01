@@ -224,11 +224,20 @@ export default function Pricing() {
           ))}
         </div>
 
-        <p className="text-center text-gray-700 text-xs mt-8">
+        {/* Guarantee bar */}
+        <div className="mt-10 border border-white/[0.07] rounded-2xl px-6 py-5 bg-[#0f0f17] flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-gray-400 text-center">
+          <span>✓ <strong className="text-white">Cancel anytime</strong> — no lock-in, no cancellation fees</span>
+          <span className="hidden sm:block text-gray-700">|</span>
+          <span>✓ <strong className="text-white">30-day money-back guarantee</strong> — not happy after your first payment? Email us for a full refund, no questions asked</span>
+          <span className="hidden sm:block text-gray-700">|</span>
+          <span>✓ <strong className="text-white">Free trial first</strong> — 30 days Pro access before you pay anything</span>
+        </div>
+
+        <p className="text-center text-gray-700 text-xs mt-6">
           All prices exclude VAT. VAT may apply depending on your country.
         </p>
 
-        <p className="text-center text-gray-600 text-sm mt-5">
+        <p className="text-center text-gray-600 text-sm mt-3">
           Not sure which plan?{' '}
           <Link to="/contact" className="text-indigo-400 hover:underline">Get in touch</Link>
           {' '}and we'll help you decide.
