@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 
-function FaqItem({ q, a }) {
-  const [open, setOpen] = useState(false)
+function FaqItem({ q, a, defaultOpen = false }) {
+  const [open, setOpen] = useState(defaultOpen)
   return (
     <div className="border-b border-white/8 py-5">
       <button
@@ -162,7 +162,7 @@ export default function Landing() {
       </nav>
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden min-h-[88vh] flex items-center">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -171,7 +171,7 @@ export default function Landing() {
             backgroundSize: '60px 60px',
           }}
         />
-        <div className="relative max-w-6xl mx-auto px-6 py-20 lg:py-28">
+        <div className="relative max-w-6xl mx-auto px-6 py-20 lg:py-24 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
             {/* Left */}
@@ -187,17 +187,26 @@ export default function Landing() {
               </h1>
 
               <p className="text-gray-400 text-lg leading-relaxed mb-8 max-w-lg">
-                Fimi collects testimonials from your customers, displays them on your website automatically, and keeps negative reviews private — so you handle them before any damage is done.
+                Fimi helps small businesses and freelancers collect testimonials, display them on their website automatically, and handle negative reviews privately — before any damage is done.
               </p>
 
-              <Link
-                to="/register"
-                className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-7 py-3.5 rounded-xl font-semibold text-base transition shadow-lg shadow-indigo-950/60"
-              >
-                Start for free →
-              </Link>
+              <div className="flex flex-wrap items-center gap-3 mb-3">
+                <Link
+                  to="/register"
+                  className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-7 py-3.5 rounded-xl font-semibold text-base transition shadow-lg shadow-indigo-950/60"
+                >
+                  Start for free →
+                </Link>
+                <Link
+                  to="/pricing"
+                  className="text-sm text-gray-400 hover:text-white transition"
+                >
+                  See pricing
+                </Link>
+              </div>
+              <p className="text-xs text-gray-700 mb-6">From €7/mo. 30-day free trial, no credit card.</p>
 
-              <div className="flex flex-wrap gap-x-6 gap-y-2 mt-8 text-sm text-gray-600">
+              <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-600">
                 <span>✓ 5-minute setup</span>
                 <span>✓ No technical skills needed</span>
                 <span>✓ GDPR compliant</span>
@@ -277,8 +286,35 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Pricing teaser */}
+      <section className="py-24 border-t border-white/5">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="mb-12">
+            <p className="text-indigo-400 text-xs font-semibold tracking-widest uppercase mb-3">Pricing</p>
+            <h2 className="text-3xl font-bold text-white">Simple pricing,<br />no surprises</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              { name: 'Free', price: '€0', desc: 'Forever free. 3 public testimonials, collect page, Wall of Love, QR code.' },
+              { name: 'Pro', price: '€7/mo', desc: 'Billed annually (€9 monthly). Unlimited reviews, widget, AI features, negative review handling.', highlight: true },
+              { name: 'Agency', price: '€23/mo', desc: 'Billed annually (€29 monthly). Everything in Pro, up to 5 brands, ideal for web agencies.' },
+            ].map((p) => (
+              <div key={p.name} className={`rounded-2xl p-6 border ${p.highlight ? 'bg-indigo-600/10 border-indigo-500/30' : 'bg-[#0f0f17] border-white/[0.07]'}`}>
+                <p className="text-xs text-gray-500 font-medium mb-1">{p.name}</p>
+                <p className="text-2xl font-bold text-white mb-3">{p.price}</p>
+                <p className="text-gray-500 text-xs leading-relaxed">{p.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 flex items-center gap-4">
+            <Link to="/pricing" className="text-sm text-indigo-400 hover:underline">Full pricing & feature comparison →</Link>
+            <span className="text-gray-700 text-xs">All prices excl. VAT · 30-day free trial on all paid plans</span>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ */}
-      <section className="py-24">
+      <section className="py-24 border-t border-white/5">
         <div className="max-w-3xl mx-auto px-6">
           <div className="mb-12">
             <p className="text-indigo-400 text-xs font-semibold tracking-widest uppercase mb-3">FAQ</p>
@@ -310,8 +346,8 @@ export default function Landing() {
                 q: 'Is my customers\' data GDPR compliant?',
                 a: 'Yes. Every submission requires explicit consent. Customers receive a unique deletion link so they can remove their data at any time.',
               },
-            ].map((item) => (
-              <FaqItem key={item.q} {...item} />
+            ].map((item, i) => (
+              <FaqItem key={item.q} {...item} defaultOpen={i === 0} />
             ))}
           </div>
           <p className="text-gray-600 text-sm mt-10">
