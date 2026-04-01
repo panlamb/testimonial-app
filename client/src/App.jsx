@@ -24,6 +24,7 @@ import Leaderboard from './pages/Leaderboard'
 import Partners from './pages/Partners'
 import ZapierIntegration from './pages/ZapierIntegration'
 import Contact from './pages/Contact'
+import About from './pages/About'
 import CookieConsent from './components/CookieConsent'
 
 function PrivateRoute({ children }) {
@@ -63,6 +64,7 @@ export default function App() {
         <Route path="/partners" element={<Partners />} />
         <Route path="/integrations/zapier" element={<ZapierIntegration />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/about" element={<About />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
