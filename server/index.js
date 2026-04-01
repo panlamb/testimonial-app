@@ -20,6 +20,18 @@ app.use('/widget', require('./routes/widget'));
 app.use('/badge', require('./routes/badge'));
 app.use('/api/admin', require('./routes/admin').router);
 
+// Unsubscribe from outreach emails
+app.get('/unsubscribe/:token', (req, res) => {
+  const row = db.prepare('SELECT id FROM outreach_emails WHERE unsubscribe_token = ?').get(req.params.token);
+  if (row) db.prepare('UPDATE outreach_emails SET unsubscribed = 1 WHERE id = ?').run(row.id);
+  res.send(`
+    <html><body style="font-family:sans-serif;text-align:center;padding:80px 24px;background:#f9fafb">
+      <h2 style="color:#1e1b4b">You've been unsubscribed</h2>
+      <p style="color:#6b7280">You won't receive any more emails from Fimi.</p>
+    </body></html>
+  `);
+});
+
 // Serve built React app in production
 if (process.env.NODE_ENV === 'production') {
   const distPath = path.join(__dirname, '..', 'client', 'dist');

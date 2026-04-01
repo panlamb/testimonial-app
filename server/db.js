@@ -67,6 +67,19 @@ for (const col of [
 
 try {
   db.exec(`
+    CREATE TABLE IF NOT EXISTS outreach_emails (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT NOT NULL,
+      business_name TEXT,
+      unsubscribe_token TEXT UNIQUE NOT NULL,
+      unsubscribed INTEGER DEFAULT 0,
+      sent_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+} catch {}
+
+try {
+  db.exec(`
     CREATE TABLE IF NOT EXISTS password_resets (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       business_id INTEGER NOT NULL,

@@ -1,7 +1,11 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const { Resend } = require('resend');
 const db = require('../db');
 const { JWT_SECRET } = require('../middleware/auth');
+
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 const router = express.Router();
 
@@ -52,6 +56,67 @@ router.put('/businesses/:id/plan', adminAuth, (req, res) => {
   if (!b) return res.status(404).json({ error: 'Business not found' });
   db.prepare('UPDATE businesses SET plan = ? WHERE id = ?').run(plan, req.params.id);
   res.json({ success: true });
+});
+
+// Outreach: get stats
+router.get('/outreach', adminAuth, (req, res) => {
+  const total = db.prepare('SELECT COUNT(*) as count FROM outreach_emails').get().count;
+  const unsubscribed = db.prepare('SELECT COUNT(*) as count FROM outreach_emails WHERE unsubscribed = 1').get().count;
+  const recent = db.prepare('SELECT email, business_name, sent_at, unsubscribed FROM outreach_emails ORDER BY sent_at DESC LIMIT 50').all();
+  res.json({ total, unsubscribed, recent });
+});
+
+// Outreach: send bulk emails from JSON array [{ email, business_name }]
+router.post('/outreach/send', adminAuth, async (req, res) => {
+  if (!resend) return res.status(503).json({ error: 'Email service not configured' });
+
+  const { contacts, subject, body } = req.body || {};
+  if (!contacts?.length) return res.status(400).json({ error: 'No contacts provided' });
+  if (!subject || !body) return res.status(400).json({ error: 'Subject and body are required' });
+
+  const appUrl = process.env.APP_URL || 'https://testimonial-app-production.up.railway.app';
+  let sent = 0;
+  let skipped = 0;
+
+  for (const contact of contacts) {
+    const email = contact.email?.trim().toLowerCase();
+    if (!email) continue;
+
+    // Skip already contacted or unsubscribed
+    const existing = db.prepare('SELECT unsubscribed FROM outreach_emails WHERE email = ?').get(email);
+    if (existing) { skipped++; continue; }
+
+    const token = crypto.randomBytes(24).toString('hex');
+    const unsubscribeUrl = `${appUrl}/unsubscribe/${token}`;
+    const personalizedBody = body.replace(/\{\{name\}\}/g, contact.business_name || 'there');
+
+    try {
+      await resend.emails.send({
+        from: 'Panos from Fimi <onboarding@resend.dev>',
+        to: email,
+        subject,
+        html: `
+          <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px">
+            <div style="white-space:pre-wrap;color:#374151;font-size:15px;line-height:1.7">${personalizedBody}</div>
+            <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0" />
+            <p style="color:#9ca3af;font-size:11px">
+              You're receiving this because you run a business that could benefit from customer reviews.
+              <a href="${unsubscribeUrl}" style="color:#9ca3af">Unsubscribe</a>
+            </p>
+          </div>
+        `,
+      });
+      db.prepare('INSERT INTO outreach_emails (email, business_name, unsubscribe_token) VALUES (?, ?, ?)').run(email, contact.business_name || null, token);
+      sent++;
+    } catch (err) {
+      console.error(`Outreach email error for ${email}:`, err.message);
+    }
+
+    // Small delay to avoid rate limits
+    await new Promise((r) => setTimeout(r, 200));
+  }
+
+  res.json({ sent, skipped });
 });
 
 module.exports = { router, adminAuth };

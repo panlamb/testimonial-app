@@ -1,29 +1,88 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function AdminDashboard() {
   const [businesses, setBusinesses] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
+  const [outreach, setOutreach] = useState(null)
+  const [outreachContacts, setOutreachContacts] = useState([])
+  const [outreachSubject, setOutreachSubject] = useState('Collect customer reviews for your business — free')
+  const [outreachBody, setOutreachBody] = useState(`Hi {{name}},
+
+I noticed your business doesn't have a dedicated testimonials page — I built a tool called Fimi that makes it really easy.
+
+With Fimi you can:
+• Collect reviews via a simple link (no app needed for customers)
+• Embed them on your website automatically
+• Keep negative reviews private so you can handle them first
+
+It takes 5 minutes to set up and it's free to start.
+
+Worth a look: https://testimonial-app-production.up.railway.app
+
+— Panos`)
+  const [outreachStatus, setOutreachStatus] = useState('')
+  const [outreachResult, setOutreachResult] = useState(null)
+  const fileRef = useRef(null)
   const navigate = useNavigate()
 
   const token = localStorage.getItem('admin_token')
 
   const load = useCallback(async () => {
     try {
-      const res = await fetch('/api/admin/businesses', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      if (res.status === 401 || res.status === 403) {
+      const [bizRes, outRes] = await Promise.all([
+        fetch('/api/admin/businesses', { headers: { Authorization: `Bearer ${token}` } }),
+        fetch('/api/admin/outreach', { headers: { Authorization: `Bearer ${token}` } }),
+      ])
+      if (bizRes.status === 401 || bizRes.status === 403) {
         localStorage.removeItem('admin_token')
         navigate('/admin')
         return
       }
-      setBusinesses(await res.json())
+      setBusinesses(await bizRes.json())
+      if (outRes.ok) setOutreach(await outRes.json())
     } finally {
       setLoading(false)
     }
   }, [token, navigate])
+
+  function handleCSV(e) {
+    const file = e.target.files[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      const lines = ev.target.result.trim().split('\n').slice(1) // skip header
+      const contacts = lines.map((line) => {
+        const [email, business_name] = line.split(',').map((s) => s.trim().replace(/^"|"$/g, ''))
+        return { email, business_name }
+      }).filter((c) => c.email?.includes('@'))
+      setOutreachContacts(contacts)
+    }
+    reader.readAsText(file)
+  }
+
+  async function handleOutreachSend() {
+    if (!outreachContacts.length) return
+    setOutreachStatus('sending')
+    setOutreachResult(null)
+    try {
+      const res = await fetch('/api/admin/outreach/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ contacts: outreachContacts, subject: outreachSubject, body: outreachBody }),
+      })
+      const data = await res.json()
+      setOutreachResult(data)
+      setOutreachContacts([])
+      if (fileRef.current) fileRef.current.value = ''
+      load()
+    } catch {
+      setOutreachStatus('error')
+    } finally {
+      setOutreachStatus('')
+    }
+  }
 
   useEffect(() => { load() }, [load])
 
@@ -157,6 +216,55 @@ export default function AdminDashboard() {
             </tbody>
           </table>
         </div>
+        {/* Outreach */}
+        <section className="bg-gray-800 rounded-xl border border-gray-700 p-6 space-y-5">
+          <div className="flex items-center justify-between">
+            <h2 className="font-bold text-white">Cold Outreach</h2>
+            {outreach && (
+              <div className="flex gap-4 text-xs text-gray-400">
+                <span>Sent: <strong className="text-white">{outreach.total}</strong></span>
+                <span>Unsubscribed: <strong className="text-red-400">{outreach.unsubscribed}</strong></span>
+              </div>
+            )}
+          </div>
+
+          <div>
+            <p className="text-xs text-gray-400 mb-2">
+              Upload a CSV with columns: <code className="bg-gray-700 px-1 rounded">email, business_name</code>
+            </p>
+            <input ref={fileRef} type="file" accept=".csv" onChange={handleCSV}
+              className="text-sm text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-indigo-600/30 file:text-indigo-300 hover:file:bg-indigo-600/50 cursor-pointer" />
+            {outreachContacts.length > 0 && (
+              <p className="text-xs text-green-400 mt-1">{outreachContacts.length} contacts loaded</p>
+            )}
+          </div>
+
+          <div>
+            <label className="text-xs text-gray-400 block mb-1">Subject</label>
+            <input type="text" value={outreachSubject} onChange={(e) => setOutreachSubject(e.target.value)}
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </div>
+
+          <div>
+            <label className="text-xs text-gray-400 block mb-1">Body — use <code className="bg-gray-700 px-1 rounded">{"{{name}}"}</code> for personalization</label>
+            <textarea value={outreachBody} onChange={(e) => setOutreachBody(e.target.value)} rows={10}
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-y font-mono" />
+          </div>
+
+          {outreachResult && (
+            <div className="bg-green-900/30 border border-green-700 rounded-lg px-4 py-3 text-sm text-green-300">
+              ✓ Sent: {outreachResult.sent} · Skipped (already contacted): {outreachResult.skipped}
+            </div>
+          )}
+
+          <button
+            onClick={handleOutreachSend}
+            disabled={!outreachContacts.length || outreachStatus === 'sending'}
+            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition"
+          >
+            {outreachStatus === 'sending' ? `Sending… (${outreachContacts.length} emails)` : `Send to ${outreachContacts.length} contacts`}
+          </button>
+        </section>
       </main>
     </div>
   )
