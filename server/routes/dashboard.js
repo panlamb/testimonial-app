@@ -69,6 +69,9 @@ router.put('/testimonials/:id/status', (req, res) => {
       const brandName = business.brand_name || business.name;
       const wallUrl = `https://testimonial-app-production.up.railway.app/wall/${business.slug}`;
       const linkedinPost = `🎉 We just hit ${approvedCount} customer reviews!\n\nHere's what people are saying about ${brandName}:\n👉 ${wallUrl}\n\nThank you to every customer who took the time to share their experience. It means everything to us.\n\n#CustomerLove #Testimonials #${brandName.replace(/\s+/g, '')}`;
+      const tweetText = `🎉 Just hit ${approvedCount} customer reviews!\n\nSee what people are saying about ${brandName} 👇\n${wallUrl}\n\n#CustomerLove #SocialProof`;
+      const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+      const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(wallUrl)}`;
 
       resend.emails.send({
         from: 'Fimi <onboarding@resend.dev>',
@@ -78,10 +81,19 @@ router.put('/testimonials/:id/status', (req, res) => {
           <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;background:#f9fafb;border-radius:12px">
             <h2 style="margin:0 0 8px;color:#1e1b4b">Milestone reached! 🎉</h2>
             <p style="color:#6b7280;margin:0 0 24px"><strong>${brandName}</strong> just hit <strong>${approvedCount} approved reviews</strong>. Time to shout about it!</p>
-            <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:20px;margin-bottom:24px">
+
+            <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:20px;margin-bottom:16px">
               <p style="font-size:12px;font-weight:600;color:#6b7280;margin:0 0 10px;text-transform:uppercase;letter-spacing:1px">Ready-to-post LinkedIn caption</p>
-              <p style="color:#374151;font-size:14px;line-height:1.7;white-space:pre-wrap;margin:0">${linkedinPost}</p>
+              <p style="color:#374151;font-size:14px;line-height:1.7;white-space:pre-wrap;margin:0 0 14px">${linkedinPost}</p>
+              <a href="${linkedinUrl}" style="background:#0077b5;color:#fff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:600;display:inline-block;font-size:13px">Post on LinkedIn →</a>
             </div>
+
+            <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:20px;margin-bottom:24px">
+              <p style="font-size:12px;font-weight:600;color:#6b7280;margin:0 0 10px;text-transform:uppercase;letter-spacing:1px">Ready-to-post X (Twitter)</p>
+              <p style="color:#374151;font-size:14px;line-height:1.7;white-space:pre-wrap;margin:0 0 14px">${tweetText}</p>
+              <a href="${tweetUrl}" style="background:#000;color:#fff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:600;display:inline-block;font-size:13px">Post on X →</a>
+            </div>
+
             <a href="${wallUrl}" style="background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;display:inline-block">
               View your Wall of Love →
             </a>
