@@ -54,7 +54,10 @@ export default function ShareableCard({ testimonial: t, businessName }) {
           {/* Business + Fimi badge */}
           <div style={{ marginTop: '40px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.15)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)' }}>{businessName}</span>
-            <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.3)' }}>Powered by Fimi</span>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px' }}>
+              <span style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(165,180,252,0.9)', letterSpacing: '0.5px' }}>Powered by Fimi</span>
+              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)' }}>getfimi.com</span>
+            </div>
           </div>
         </div>
       </div>
