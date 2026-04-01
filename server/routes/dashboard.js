@@ -92,7 +92,7 @@ router.put('/testimonials/:id/status', (req, res) => {
     if (MILESTONES.includes(approvedCount)) {
       const business = db.prepare('SELECT name, email, slug, brand_name FROM businesses WHERE id = ?').get(req.businessId);
       const brandName = business.brand_name || business.name;
-      const wallUrl = `https://testimonial-app-production.up.railway.app/wall/${business.slug}`;
+      const wallUrl = `https://get-fimi.com/wall/${business.slug}`;
       const linkedinPost = `🎉 We just hit ${approvedCount} customer reviews!\n\nHere's what people are saying about ${brandName}:\n👉 ${wallUrl}\n\nThank you to every customer who took the time to share their experience. It means everything to us.\n\n#CustomerLove #Testimonials #${brandName.replace(/\s+/g, '')}`;
       const tweetText = `🎉 Just hit ${approvedCount} customer reviews!\n\nSee what people are saying about ${brandName} 👇\n${wallUrl}\n\n#CustomerLove #SocialProof`;
       const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
@@ -262,7 +262,7 @@ router.post('/request-review', async (req, res) => {
           </p>
           ${!business.brand_name ? `
           <p style="color:#d1d5db;font-size:11px;margin-top:16px;padding-top:16px;border-top:1px solid #e5e7eb">
-            Sent via <a href="https://testimonial-app-production.up.railway.app?ref=email-footer" style="color:#a5b4fc;text-decoration:none">Fimi</a> — collect customer reviews for your business
+            Sent via <a href="https://get-fimi.com?ref=email-footer" style="color:#a5b4fc;text-decoration:none">Fimi</a> — collect customer reviews for your business
           </p>` : ''}
         </div>
       `,

@@ -2,195 +2,195 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Core pages -->
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/</loc>
+    <loc>https://get-fimi.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/pricing</loc>
+    <loc>https://get-fimi.com/pricing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/register</loc>
+    <loc>https://get-fimi.com/register</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/help</loc>
+    <loc>https://get-fimi.com/help</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/login</loc>
+    <loc>https://get-fimi.com/login</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/privacy</loc>
+    <loc>https://get-fimi.com/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/terms</loc>
+    <loc>https://get-fimi.com/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <!-- Blog -->
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/blog</loc>
+    <loc>https://get-fimi.com/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/blog/how-to-collect-customer-testimonials</loc>
+    <loc>https://get-fimi.com/blog/how-to-collect-customer-testimonials</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/blog/handle-negative-reviews</loc>
+    <loc>https://get-fimi.com/blog/handle-negative-reviews</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/blog/best-testimonial-software-2025</loc>
+    <loc>https://get-fimi.com/blog/best-testimonial-software-2025</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/blog/embed-testimonials-website</loc>
+    <loc>https://get-fimi.com/blog/embed-testimonials-website</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/blog/social-proof-small-business</loc>
+    <loc>https://get-fimi.com/blog/social-proof-small-business</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Competitor comparison pages -->
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/vs/senja</loc>
+    <loc>https://get-fimi.com/vs/senja</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/vs/testimonial-to</loc>
+    <loc>https://get-fimi.com/vs/testimonial-to</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/vs/endorsal</loc>
+    <loc>https://get-fimi.com/vs/endorsal</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/vs/trustpilot</loc>
+    <loc>https://get-fimi.com/vs/trustpilot</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Tools & other pages -->
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/tools/review-response</loc>
+    <loc>https://get-fimi.com/tools/review-response</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/leaderboard</loc>
+    <loc>https://get-fimi.com/leaderboard</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/partners</loc>
+    <loc>https://get-fimi.com/partners</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/integrations/zapier</loc>
+    <loc>https://get-fimi.com/integrations/zapier</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Industry landing pages -->
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/restaurants</loc>
+    <loc>https://get-fimi.com/for/restaurants</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/agencies</loc>
+    <loc>https://get-fimi.com/for/agencies</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/freelancers</loc>
+    <loc>https://get-fimi.com/for/freelancers</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/coaches</loc>
+    <loc>https://get-fimi.com/for/coaches</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/dentists</loc>
+    <loc>https://get-fimi.com/for/dentists</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/gyms</loc>
+    <loc>https://get-fimi.com/for/gyms</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/salons</loc>
+    <loc>https://get-fimi.com/for/salons</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/ecommerce</loc>
+    <loc>https://get-fimi.com/for/ecommerce</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/lawyers</loc>
+    <loc>https://get-fimi.com/for/lawyers</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/hotels</loc>
+    <loc>https://get-fimi.com/for/hotels</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/photographers</loc>
+    <loc>https://get-fimi.com/for/photographers</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/tutors</loc>
+    <loc>https://get-fimi.com/for/tutors</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/real-estate</loc>
+    <loc>https://get-fimi.com/for/real-estate</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/accountants</loc>
+    <loc>https://get-fimi.com/for/accountants</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/personal-trainers</loc>
+    <loc>https://get-fimi.com/for/personal-trainers</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/for/startups</loc>
+    <loc>https://get-fimi.com/for/startups</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

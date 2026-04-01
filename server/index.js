@@ -49,7 +49,7 @@ if (process.env.NODE_ENV === 'production') {
     if (!business) return res.sendFile(path.join(distPath, 'index.html'));
 
     const displayName = business.brand_name || business.name;
-    const appUrl = process.env.APP_URL || 'https://testimonial-app-production.up.railway.app';
+    const appUrl = process.env.APP_URL || 'https://get-fimi.com';
     const wallUrl = `${appUrl}/wall/${business.slug}`;
     const ogImage = business.brand_logo_url || `${appUrl}/OG.png`;
 
@@ -124,7 +124,7 @@ cron.schedule('0 9 * * *', async () => {
           </thead>
           <tbody>${rows}</tbody>
         </table>
-        <a href="https://testimonial-app-production.up.railway.app/admin/dashboard" style="display:inline-block;margin-top:24px;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600">
+        <a href="https://get-fimi.com/admin/dashboard" style="display:inline-block;margin-top:24px;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600">
           Admin Dashboard →
         </a>
       </div>
@@ -171,7 +171,7 @@ cron.schedule('0 9 * * 1', async () => {
     // Only send if there was activity
     if (newTestimonials === 0 && widgetViews === 0) continue;
 
-    const appUrl = process.env.APP_URL || 'https://testimonial-app-production.up.railway.app';
+    const appUrl = process.env.APP_URL || 'https://get-fimi.com';
 
     await resend.emails.send({
       from: 'Fimi <onboarding@resend.dev>',

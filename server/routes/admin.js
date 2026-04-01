@@ -74,7 +74,7 @@ router.post('/outreach/send', adminAuth, async (req, res) => {
   if (!contacts?.length) return res.status(400).json({ error: 'No contacts provided' });
   if (!subject || !body) return res.status(400).json({ error: 'Subject and body are required' });
 
-  const appUrl = process.env.APP_URL || 'https://testimonial-app-production.up.railway.app';
+  const appUrl = process.env.APP_URL || 'https://get-fimi.com';
   let sent = 0;
   let skipped = 0;
 

@@ -19,7 +19,7 @@ With Fimi you can:
 
 It takes 5 minutes to set up and it's free to start.
 
-Worth a look: https://testimonial-app-production.up.railway.app
+Worth a look: https://get-fimi.com
 
 — Panos`)
   const [outreachStatus, setOutreachStatus] = useState('')

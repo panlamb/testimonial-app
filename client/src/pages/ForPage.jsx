@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 
-const APP_URL = 'https://testimonial-app-production.up.railway.app'
+const APP_URL = 'https://get-fimi.com'
 
 const INDUSTRIES = {
   restaurants: {

@@ -29,7 +29,7 @@ async function notifyNewSignup({ name, email, slug }) {
           <p style="margin:0 0 8px"><strong>Slug:</strong> ${slug}</p>
           <p style="margin:0"><strong>Ημερομηνία:</strong> ${date}</p>
         </div>
-        <a href="https://testimonial-app-production.up.railway.app/admin/dashboard" style="background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;display:inline-block">
+        <a href="https://get-fimi.com/admin/dashboard" style="background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;display:inline-block">
           Admin Dashboard →
         </a>
       </div>
@@ -106,7 +106,7 @@ router.post('/forgot-password', async (req, res) => {
   db.prepare('DELETE FROM password_resets WHERE business_id = ?').run(business.id);
   db.prepare('INSERT INTO password_resets (business_id, token, expires_at) VALUES (?, ?, ?)').run(business.id, token, expiresAt);
 
-  const resetUrl = `${process.env.APP_URL || 'https://testimonial-app-production.up.railway.app'}/reset-password?token=${token}`;
+  const resetUrl = `${process.env.APP_URL || 'https://get-fimi.com'}/reset-password?token=${token}`;
 
   await resend.emails.send({
     from: 'Fimi <onboarding@resend.dev>',

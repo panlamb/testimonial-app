@@ -4,4 +4,4 @@ Disallow: /dashboard
 Disallow: /admin
 Disallow: /api
 
-Sitemap: https://testimonial-app-production.up.railway.app/sitemap.xml
+Sitemap: https://get-fimi.com/sitemap.xml

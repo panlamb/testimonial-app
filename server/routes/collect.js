@@ -22,7 +22,7 @@ async function sendNotification({ to, businessName, customerName, rating, review
           <p style="font-size:20px;margin:0 0 8px">${stars}</p>
           <p style="color:#374151;margin:0;font-style:italic">"${reviewText}"</p>
         </div>
-        <a href="https://testimonial-app-production.up.railway.app/dashboard" style="background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;display:inline-block">
+        <a href="https://get-fimi.com/dashboard" style="background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;display:inline-block">
           Δες την κριτική →
         </a>
         <p style="color:#9ca3af;font-size:12px;margin-top:24px">Fimi — απόκρυψη ειδοποιήσεων από το dashboard</p>
@@ -48,7 +48,7 @@ async function sendPrivateFeedback({ to, businessName, customerName, customerEma
           <p style="margin:0;font-size:14px;color:#374151"><strong>Name:</strong> ${customerName}</p>
           ${customerEmail ? `<p style="margin:4px 0 0;font-size:14px;color:#374151"><strong>Email:</strong> <a href="mailto:${customerEmail}">${customerEmail}</a></p>` : ''}
         </div>
-        <a href="https://testimonial-app-production.up.railway.app/dashboard" style="background:#dc2626;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;display:inline-block">
+        <a href="https://get-fimi.com/dashboard" style="background:#dc2626;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;display:inline-block">
           View in Dashboard →
         </a>
         <p style="color:#9ca3af;font-size:12px;margin-top:24px">Fimi automatically kept this review private to protect your reputation.</p>
