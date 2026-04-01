@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Core pages -->
   <url>
     <loc>https://testimonial-app-production.up.railway.app/</loc>
     <changefreq>weekly</changefreq>
@@ -11,19 +12,19 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://testimonial-app-production.up.railway.app/help</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://testimonial-app-production.up.railway.app/register</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://testimonial-app-production.up.railway.app/help</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://testimonial-app-production.up.railway.app/login</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://testimonial-app-production.up.railway.app/privacy</loc>
@@ -34,5 +35,141 @@
     <loc>https://testimonial-app-production.up.railway.app/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+  </url>
+
+  <!-- Blog -->
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/blog/how-to-collect-customer-testimonials</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/blog/handle-negative-reviews</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/blog/best-testimonial-software-2025</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/blog/embed-testimonials-website</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/blog/social-proof-small-business</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Competitor comparison pages -->
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/vs/senja</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/vs/testimonial-to</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/vs/endorsal</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/vs/trustpilot</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Industry landing pages -->
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/restaurants</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/agencies</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/freelancers</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/coaches</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/dentists</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/gyms</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/salons</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/ecommerce</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/lawyers</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/hotels</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/photographers</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/tutors</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/real-estate</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/accountants</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/personal-trainers</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://testimonial-app-production.up.railway.app/for/startups</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>

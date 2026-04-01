@@ -16,6 +16,9 @@ import ResetPassword from './pages/ResetPassword'
 import TermsOfService from './pages/TermsOfService'
 import NotFound from './pages/NotFound'
 import VsPage from './pages/VsPage'
+import ForPage from './pages/ForPage'
+import BlogIndex from './pages/BlogIndex'
+import BlogPost from './pages/BlogPost'
 import CookieConsent from './components/CookieConsent'
 
 function PrivateRoute({ children }) {
@@ -47,6 +50,9 @@ export default function App() {
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
         <Route path="/vs/:competitor" element={<VsPage />} />
+        <Route path="/for/:industry" element={<ForPage />} />
+        <Route path="/blog" element={<BlogIndex />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
