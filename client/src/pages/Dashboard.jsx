@@ -6,6 +6,83 @@ import TestimonialCard from '../components/TestimonialCard'
 
 const FILTERS = ['all', 'pending', 'approved', 'rejected', 'hidden']
 
+function TrialBanner({ trialEndsAt }) {
+  const [dismissed, setDismissed] = useState(() => localStorage.getItem('trial_banner_dismissed') === '1')
+  if (!trialEndsAt || dismissed) return null
+  const daysLeft = Math.ceil((new Date(trialEndsAt) - Date.now()) / (1000 * 60 * 60 * 24))
+  if (daysLeft <= 0 || daysLeft > 14) return null
+  return (
+    <div className="bg-amber-50 border border-amber-200 rounded-xl px-5 py-3.5 flex items-center justify-between gap-4">
+      <p className="text-sm text-amber-800">
+        <strong>Your free trial ends in {daysLeft} {daysLeft === 1 ? 'day' : 'days'}.</strong>{' '}
+        Upgrade to Pro to keep access to all features.
+      </p>
+      <div className="flex items-center gap-3 shrink-0">
+        <a href="/pricing" className="text-sm bg-amber-600 hover:bg-amber-700 text-white font-semibold px-4 py-1.5 rounded-lg transition">
+          Upgrade →
+        </a>
+        <button onClick={() => { localStorage.setItem('trial_banner_dismissed', '1'); setDismissed(true) }} className="text-amber-500 hover:text-amber-700 text-lg leading-none">×</button>
+      </div>
+    </div>
+  )
+}
+
+function OnboardingChecklist({ business, testimonials, onDismiss }) {
+  const [widgetDone, setWidgetDone] = useState(() => localStorage.getItem('ob_widget') === '1')
+  const [shareDone, setShareDone] = useState(() => localStorage.getItem('ob_share') === '1')
+
+  const hasTestimonial = testimonials.length > 0
+  const hasApproved = testimonials.some((t) => t.status === 'approved')
+  const hasBranding = !!business.brand_name
+
+  const steps = [
+    { label: 'Share your collection link with a customer', done: hasTestimonial || shareDone, action: () => { localStorage.setItem('ob_share', '1'); setShareDone(true) }, actionLabel: 'Mark done' },
+    { label: 'Get your first testimonial approved', done: hasApproved },
+    { label: 'Set up your branding (brand name & logo)', done: hasBranding, href: '#branding', actionLabel: 'Go to Branding' },
+    { label: 'Embed the widget on your website', done: widgetDone, action: () => { localStorage.setItem('ob_widget', '1'); setWidgetDone(true) }, actionLabel: 'Mark done' },
+  ]
+
+  const completedCount = steps.filter((s) => s.done).length
+  const allDone = completedCount === steps.length
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl p-5">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h3 className="font-semibold text-gray-900 text-sm">Getting started</h3>
+          <p className="text-xs text-gray-500 mt-0.5">{completedCount} of {steps.length} steps complete</p>
+        </div>
+        <button onClick={onDismiss} className="text-gray-400 hover:text-gray-600 text-xl leading-none">×</button>
+      </div>
+      <div className="w-full bg-gray-100 rounded-full h-1.5 mb-4">
+        <div className="bg-indigo-500 h-1.5 rounded-full transition-all" style={{ width: `${(completedCount / steps.length) * 100}%` }} />
+      </div>
+      <ul className="space-y-2.5">
+        {steps.map((step, i) => (
+          <li key={i} className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className={`w-5 h-5 rounded-full shrink-0 flex items-center justify-center text-xs ${step.done ? 'bg-green-500 text-white' : 'border-2 border-gray-300'}`}>
+                {step.done ? '✓' : ''}
+              </div>
+              <span className={`text-sm ${step.done ? 'line-through text-gray-400' : 'text-gray-700'}`}>{step.label}</span>
+            </div>
+            {!step.done && (step.action || step.href) && (
+              step.href
+                ? <a href={step.href} className="text-xs text-indigo-600 hover:underline shrink-0">{step.actionLabel}</a>
+                : <button onClick={step.action} className="text-xs text-indigo-600 hover:underline shrink-0">{step.actionLabel}</button>
+            )}
+          </li>
+        ))}
+      </ul>
+      {allDone && (
+        <div className="mt-4 bg-green-50 border border-green-200 rounded-lg px-4 py-2.5 text-sm text-green-700 font-medium text-center">
+          All done! You're set up. 🎉
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function Dashboard() {
   const [business, setBusiness] = useState(null)
   const [testimonials, setTestimonials] = useState([])
@@ -26,6 +103,7 @@ export default function Dashboard() {
   const [reviewRequestStatus, setReviewRequestStatus] = useState('')
   const [aiReplies, setAiReplies] = useState({})
   const [aiReplyLoading, setAiReplyLoading] = useState({})
+  const [onboardingDismissed, setOnboardingDismissed] = useState(() => localStorage.getItem('ob_dismissed') === '1')
   const qrRef = useRef(null)
   const navigate = useNavigate()
 
@@ -184,6 +262,19 @@ export default function Dashboard() {
       </header>
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+        <TrialBanner trialEndsAt={business.trial_ends_at} />
+
+        {!onboardingDismissed && (
+          <section>
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Getting Started</h2>
+            <OnboardingChecklist
+              business={business}
+              testimonials={testimonials}
+              onDismiss={() => { localStorage.setItem('ob_dismissed', '1'); setOnboardingDismissed(true) }}
+            />
+          </section>
+        )}
+
         {/* Links / sharing */}
         <section>
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
@@ -334,7 +425,7 @@ export default function Dashboard() {
         )}
 
         {/* White Label Branding */}
-        <section>
+        <section id="branding">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
             White Label Branding
           </h2>

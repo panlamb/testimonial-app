@@ -100,6 +100,9 @@ export default function Landing() {
             <Link to="/pricing" className="text-sm text-gray-400 hover:text-white transition">
               Pricing
             </Link>
+            <Link to="/blog" className="text-sm text-gray-400 hover:text-white transition">
+              Blog
+            </Link>
             <Link to="/login" className="text-sm text-gray-400 hover:text-white transition">
               Sign in
             </Link>
@@ -320,6 +323,7 @@ export default function Landing() {
       <footer className="border-t border-white/10 py-8 text-center text-sm text-gray-600">
         <div className="flex justify-center gap-6 mb-4">
           <Link to="/pricing" className="hover:text-gray-300 transition">Pricing</Link>
+          <Link to="/blog" className="hover:text-gray-300 transition">Blog</Link>
           <Link to="/help" className="hover:text-gray-300 transition">Help</Link>
           <Link to="/terms" className="hover:text-gray-300 transition">Terms</Link>
           <Link to="/privacy" className="hover:text-gray-300 transition">Privacy</Link>
