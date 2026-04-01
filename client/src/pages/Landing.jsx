@@ -7,6 +7,7 @@ function FaqItem({ q, a, defaultOpen = false }) {
     <div className="border-b border-white/8 py-5">
       <button
         onClick={() => setOpen(!open)}
+        aria-expanded={open}
         className="w-full text-left flex items-start justify-between gap-4 group"
       >
         <span className="text-sm font-medium text-white group-hover:text-indigo-300 transition leading-relaxed">{q}</span>
