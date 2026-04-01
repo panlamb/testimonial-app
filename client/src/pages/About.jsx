@@ -30,14 +30,16 @@ export default function About() {
 
         {/* Founder */}
         <div className="flex items-center gap-5 mb-12">
-          <div className="w-16 h-16 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-2xl font-bold text-indigo-300 shrink-0">
-            P
-          </div>
+          <img
+            src="/panos.jpg"
+            alt="Panos Lambrakis"
+            className="w-16 h-16 rounded-2xl object-cover object-top shrink-0"
+          />
           <div>
             <p className="text-white font-semibold text-lg leading-tight">Panos Lambrakis</p>
             <p className="text-gray-500 text-sm mt-0.5">Founder · Greece</p>
             <a
-              href="https://www.linkedin.com/in/panos-lambrakis"
+              href="https://www.linkedin.com/in/panos-lambrakis/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-indigo-400 text-xs hover:underline mt-1 inline-block"
